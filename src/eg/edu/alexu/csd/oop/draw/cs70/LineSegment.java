@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.util.Map;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
-import javafx.geometry.Point2D;
 
 /**
  * @author H

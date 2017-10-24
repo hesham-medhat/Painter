@@ -4,7 +4,8 @@ public interface Shape {
 
 	/**
 	 * Sets the central position of the shape.
-	 * 
+	 * Must check whether it lies within the canvas
+	 * before setting.
 	 * @param position
 	 *            to be set
 	 */
