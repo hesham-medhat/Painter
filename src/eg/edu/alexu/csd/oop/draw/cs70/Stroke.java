@@ -2,6 +2,7 @@ package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.HashMap;
 import java.util.Map;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
@@ -19,7 +20,7 @@ public abstract class Stroke implements Shape {
 	/**
 	 * Stroke thickness of the shape's borders.
 	 */
-	protected Double strokeWidth = 1.0;
+	protected Double strokeWidth;
 
 	/**
 	 * Center point of the shape.
@@ -41,6 +42,11 @@ public abstract class Stroke implements Shape {
 	 * String keys to Double values.
 	 */
 	protected Map<String, Double> prop;
+
+	public Stroke() {
+		prop = new HashMap<>();
+		strokeWidth = 1.0;
+	}
 
 	@Override
 	public void setPosition(final Point position) {

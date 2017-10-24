@@ -14,6 +14,17 @@ import eg.edu.alexu.csd.oop.draw.Shape;
 public class LineSegment extends Stroke {
 
 	/**
+	 * Default constructor given nothing.
+	 */
+	public LineSegment() {
+		super();
+		prop.put("fpx", 0.0);
+		prop.put("fpy", 0.0);
+		prop.put("spx", 0.0);
+		prop.put("spy", 0.0);
+	}
+
+	/**
 	 * Constructor if points were given as coordinates.
 	 * @param fpx first point's x coordinate.
 	 * @param fpy first point's y coordinate.
