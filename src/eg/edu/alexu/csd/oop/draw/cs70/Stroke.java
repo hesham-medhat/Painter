@@ -89,6 +89,12 @@ public abstract class Stroke implements Shape {
 	}
 
 	@Override
+	public void setProperties(final Map<String, Double>
+	properties) {
+		prop = properties;
+	}
+
+	@Override
 	public Map<String, Double> getProperties() {
 		return prop;
 	}

@@ -35,13 +35,6 @@ public class LineSegment extends Stroke {
 	}
 
 	@Override
-	public void setProperties(Map<String, Double>
-	properties) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public Object clone() throws CloneNotSupportedException {
 		Shape newShape = new LineSegment(prop.get("fpx"), prop.get("fpy"), prop.get("spx"), prop.get("spy"));
 		cloneBasic(newShape, this);
