@@ -17,6 +17,11 @@ import eg.edu.alexu.csd.oop.draw.Shape;
 public abstract class Stroke implements Shape {
 
 	/**
+	 * Stroke thickness of the shape's borders.
+	 */
+	protected Double strokeWidth = 1.0;
+
+	/**
 	 * Center point of the shape.
 	 */
 	protected Point center;
@@ -81,6 +86,11 @@ public abstract class Stroke implements Shape {
 	@Override
 	public Color getFillColor() {
 		return fill;
+	}
+
+	@Override
+	public Map<String, Double> getProperties() {
+		return prop;
 	}
 
 	@Override
