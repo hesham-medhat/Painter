@@ -43,9 +43,15 @@ public abstract class Stroke implements Shape {
 	 */
 	protected Map<String, Double> prop;
 
+	/**
+	 * Default constructor.
+	 */
 	public Stroke() {
 		prop = new HashMap<>();
 		strokeWidth = 1.0;
+		color = Color.BLACK;
+		fill = Color.BLUE;
+		center = new Point();
 	}
 
 	@Override

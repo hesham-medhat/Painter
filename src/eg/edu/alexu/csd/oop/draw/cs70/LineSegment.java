@@ -37,6 +37,8 @@ public class LineSegment extends Stroke {
 		prop.put("fpy", fpy);
 		prop.put("spx", spx);
 		prop.put("spy", spy);
+		center.x = (int) ((fpx + spx) / 2);
+		center.y = (int) ((fpy + spy) / 2);
 	}
 
 	/**
@@ -50,6 +52,8 @@ public class LineSegment extends Stroke {
 		prop.put("fpy", fp.getY());
 		prop.put("spx", sp.getX());
 		prop.put("spy", sp.getY());
+		center.x = (int) ((fp.getX() + sp.getX()) / 2);
+		center.y = (int) ((fp.getY() + sp.getY()) / 2);
 	}
 
 	@Override

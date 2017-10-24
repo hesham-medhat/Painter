@@ -33,6 +33,8 @@ public class Circle extends Stroke {
 		prop.put("radius", radius);
 		prop.put("centerX", centerX);
 		prop.put("centerY", centerY);
+		center.x = (int) centerX;
+		center.y = (int) centerY;
 	}
 
 	/**
@@ -45,11 +47,13 @@ public class Circle extends Stroke {
 		prop.put("radius", radius);
 		prop.put("centerX", center.getX());
 		prop.put("centerY", center.getY());
+		setPosition(center);
 	}
 	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Shape newCircle = new Circle(prop.get("radius"), prop.get("centerX"), prop.get("centerY"));
+		Shape newCircle = new Circle(prop.get("radius"),
+				prop.get("centerX"), prop.get("centerY"));
 		cloneBasic(newCircle, this);
 		return newCircle;
 	}
