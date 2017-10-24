@@ -7,11 +7,19 @@ import java.util.Map;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 /**
+ * Holds data for line segment representation.
  * @author H
  *
  */
 public class LineSegment extends Stroke {
 
+	/**
+	 * Constructor if points were given as coordinates.
+	 * @param fpx first point's x coordinate.
+	 * @param fpy first point's y coordinate.
+	 * @param spx second point's x coordinate.
+	 * @param spy second point's y coordinate.
+	 */
 	public LineSegment(final double fpx,
 			final double fpy, final double spx,
 			final double spy) {
@@ -24,6 +32,11 @@ public class LineSegment extends Stroke {
 		prop = properties;
 	}
 
+	/**
+	 * Constructor if start-end points were given as Points.
+	 * @param fp first point.
+	 * @param sp second point.
+	 */
 	public LineSegment(final Point fp, final Point sp) {
 		Map<String, Double> properties =
 				new HashMap<>();
