@@ -8,43 +8,43 @@ import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class Drawer implements DrawingEngine {
-	
-	private ArrayList<Stroke> ShapesOnCanvas = new ArrayList<>();
-	private ArrayList<ICommand> actionsPerformed = new ArrayList<>();
-	private ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
+
+	private final ArrayList<Stroke> ShapesOnCanvas = new ArrayList<>();
+	private final ArrayList<ICommand> actionsPerformed = new ArrayList<>();
+	private final ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
 
 	@Override
-	public void refresh(Graphics canvas) {
+	public void refresh(final Graphics canvas) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void addShape(Shape shape) {
-		ShapesOnCanvas.add((Stroke)shape);
-		DrawCommand draw = new DrawCommand((Stroke)shape);
+	public void addShape(final Shape shape) {
+		ShapesOnCanvas.add((Stroke) shape);
+		final DrawCommand draw = new DrawCommand((Stroke) shape);
 		draw.execute();
 		actionsPerformed.add(draw);
 	}
 
 	@Override
-	public void removeShape(Shape shape) {
-		ShapesOnCanvas.remove((Stroke)shape);
-		RemoveCommand remove = new RemoveCommand((Stroke)shape);
+	public void removeShape(final Shape shape) {
+		ShapesOnCanvas.remove(shape);
+		final RemoveCommand remove = new RemoveCommand((Stroke) shape);
 		remove.execute();
 		actionsPerformed.add(remove);
 	}
 
 	@Override
-	public void updateShape(Shape oldShape, Shape newShape) {
+	public void updateShape(final Shape oldShape, final Shape newShape) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public Shape[] getShapes() {
-		Object [] shapes = ShapesOnCanvas.toArray();
-		return (Stroke [])shapes;
+		final Object[] shapes = ShapesOnCanvas.toArray();
+		return (Stroke[]) shapes;
 	}
 
 	@Override
@@ -55,34 +55,42 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void undo() {
-		ICommand action = actionsPerformed.get(actionsPerformed.size()-1);
+		final ICommand action = actionsPerformed.get(actionsPerformed.size() - 1);
 		action.unexecute();
 		actionsUNPerformed.add(action);
-		
-		
+		if (action.getCommand() == "draw") {
+			ShapesOnCanvas.remove(action.getReciever());
+
+		} else if (action.getCommand() == "remove") {
+			ShapesOnCanvas.add(action.getReciever());
+		}
+
 	}
 
 	@Override
 	public void redo() {
-			ICommand action = actionsUNPerformed.get(actionsUNPerformed.size()-1);
-			action.execute();
-			actionsPerformed.add(action);
-			if(action.getCommand()=="draw"){
-				ShapesOnCanvas.add((Stroke)(action.getReciever()));
-				
-			}
+		final ICommand action = actionsUNPerformed.get(actionsUNPerformed.size() - 1);
+		action.execute();
+		actionsPerformed.add(action);
+		if (action.getCommand() == "draw") {
+			ShapesOnCanvas.add(action.getReciever());
+
+		} else if (action.getCommand() == "remove") {
+			ShapesOnCanvas.remove(action.getReciever());
+
+		}
 	}
 
 	@Override
-	public void save(String path) {
+	public void save(final String path) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void load(String path) {
+	public void load(final String path) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
