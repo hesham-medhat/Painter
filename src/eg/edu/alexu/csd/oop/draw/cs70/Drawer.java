@@ -1,15 +1,21 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class Drawer implements DrawingEngine {
 
-	private final ArrayList<Stroke> ShapesOnCanvas = new ArrayList<>();
+	private final ArrayList<Stroke> shapes = new ArrayList<>();
 	private final ArrayList<ICommand> actionsPerformed = new ArrayList<>();
 	private final ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
 
@@ -21,7 +27,7 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void addShape(final Shape shape) {
-		ShapesOnCanvas.add((Stroke) shape);
+		shapes.add((Stroke) shape);
 		final DrawCommand draw = new DrawCommand((Stroke) shape);
 		draw.execute();
 		actionsPerformed.add(draw);
@@ -29,7 +35,7 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void removeShape(final Shape shape) {
-		ShapesOnCanvas.remove(shape);
+		shapes.remove(shape);
 		final RemoveCommand remove = new RemoveCommand((Stroke) shape);
 		remove.execute();
 		actionsPerformed.add(remove);
@@ -43,8 +49,8 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public Shape[] getShapes() {
-		final Object[] shapes = ShapesOnCanvas.toArray();
-		return (Stroke[]) shapes;
+		final Object[] shapesArr = shapes.toArray();
+		return (Shape[]) shapesArr;
 	}
 
 	@Override
@@ -59,10 +65,10 @@ public class Drawer implements DrawingEngine {
 		action.unexecute();
 		actionsUNPerformed.add(action);
 		if (action.getCommand() == "draw") {
-			ShapesOnCanvas.remove(action.getReciever());
+			shapes.remove(action.getReciever());
 
 		} else if (action.getCommand() == "remove") {
-			ShapesOnCanvas.add(action.getReciever());
+			shapes.add(action.getReciever());
 		}
 
 	}
@@ -73,17 +79,45 @@ public class Drawer implements DrawingEngine {
 		action.execute();
 		actionsPerformed.add(action);
 		if (action.getCommand() == "draw") {
-			ShapesOnCanvas.add(action.getReciever());
+			shapes.add(action.getReciever());
 
 		} else if (action.getCommand() == "remove") {
-			ShapesOnCanvas.remove(action.getReciever());
+			shapes.remove(action.getReciever());
 
 		}
 	}
 
 	@Override
 	public void save(final String path) {
-		// TODO Auto-generated method stub
+		if (path == null || path.length() < 5) {
+			throw new RuntimeException("Invalid path.");
+		}
+		String extension = path.substring(path.length() - 6);
+		if (extension.substring(1).equals(".xml")) {
+			try {
+				FileWriter fw = new FileWriter(path);
+				// TODO: xml saving.
+				fw.close();
+			} catch (IOException ioE) {
+				ioE.printStackTrace();
+			}
+		} else if (extension.equals("json")) {
+			try {
+				FileWriter fw = new FileWriter(path);
+				JSONObject jO = new JSONObject();
+				JSONArray jShapes = new JSONArray(shapes);
+				JSONArray jActionsPerformed = new JSONArray(actionsPerformed);
+				JSONArray jActionsUNPerformed = new JSONArray(actionsUNPerformed);
+				jO.append("shapes", jShapes);
+				jO.append("actionsUNPerformed", jActionsPerformed);
+				jO.append("actionsPerformed", jActionsUNPerformed);
+				fw.close();
+			} catch (JSONException jE) {
+				jE.printStackTrace();
+			} catch (IOException ioE) {
+				ioE.printStackTrace();
+			}
+		}
 
 	}
 
