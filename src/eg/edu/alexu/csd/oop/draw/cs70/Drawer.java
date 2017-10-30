@@ -105,9 +105,11 @@ public class Drawer implements DrawingEngine {
 			try {
 				FileWriter fw = new FileWriter(path);
 				JSONObject jO = new JSONObject();
-				JSONArray jShapes = new JSONArray(shapes);
+				JSONArray jShapes = new JSONArray();
+				
 				JSONArray jActionsPerformed = new JSONArray(actionsPerformed);
 				JSONArray jActionsUNPerformed = new JSONArray(actionsUNPerformed);
+				
 				jO.append("shapes", jShapes);
 				jO.append("actionsUNPerformed", jActionsPerformed);
 				jO.append("actionsPerformed", jActionsUNPerformed);
