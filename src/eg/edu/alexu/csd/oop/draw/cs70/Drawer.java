@@ -1,8 +1,6 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +12,7 @@ import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class Drawer implements DrawingEngine {
-
+	public static final int MAX_SIZE = 20;
 
 	private final ArrayList<Shape> shapes = new ArrayList<>();
 
@@ -29,18 +27,18 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void addShape(final Shape shape) {
-		shapes.add((Stroke) shape);
-		final DrawCommand draw = new DrawCommand((Stroke) shape);
+		shapes.add(shape);
+		final DrawCommand draw = new DrawCommand(shape);
 		draw.execute();
-		actionsPerformed.add(draw);
+		addCommand(actionsPerformed, draw);
 	}
 
 	@Override
 	public void removeShape(final Shape shape) {
 		shapes.remove(shape);
-		final RemoveCommand remove = new RemoveCommand((Stroke) shape);
+		final RemoveCommand remove = new RemoveCommand(shape);
 		remove.execute();
-		actionsPerformed.add(remove);
+		addCommand(actionsPerformed, remove);
 	}
 
 	@Override
@@ -49,13 +47,17 @@ public class Drawer implements DrawingEngine {
 		shapes.add(newShape);
 		UpdateCommand update = new UpdateCommand(oldShape, newShape);
 		update.execute();
-		actionsPerformed.add(update);
+		addCommand(actionsPerformed, update);
 	}
 
 	@Override
 	public Shape[] getShapes() {
-		final Object[] shapesArr = shapes.toArray();
-		return (Shape[]) shapesArr;
+		Shape[] shapesArr = new Shape[shapes.size()];
+		int i = 0;
+		for (Shape sh : shapes) {
+			shapesArr[i++] = sh;
+		}
+		return shapesArr;
 	}
 
 	@Override
@@ -66,35 +68,43 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void undo() {
-		final ICommand action = actionsPerformed.get(actionsPerformed.size() - 1);
-		action.unexecute();
-		actionsUNPerformed.add(action);
-		if (action.getCommand().equals("draw")) {
-			shapes.remove(action.getReciever(null));
-
-		} else if (action.getCommand().equals("remove")) {
-			shapes.add(action.getReciever(null));
-		} else if (action.getCommand().equals("update")) {
-			shapes.add(action.getReciever("old shape"));
-			shapes.remove(action.getReciever("new shape"));
+		if (actionsPerformed.size() == 0) {
+			return;
+		} else {
+			final ICommand action = actionsPerformed.get(actionsPerformed.size() - 1);
+			actionsPerformed.remove(actionsPerformed.size() - 1);
+			action.unexecute();
+			addCommand(actionsUNPerformed, action);
+			if (action.getCommand().equals("draw")) {
+				shapes.remove(action.getReciever(null));
+			} else if (action.getCommand().equals("remove")) {
+				shapes.add(action.getReciever(null));
+			} else if (action.getCommand().equals("update")) {
+				shapes.add(action.getReciever("old shape"));
+				shapes.remove(action.getReciever("new shape"));
+			}
 		}
-
 	}
 
 	@Override
 	public void redo() {
-		final ICommand action = actionsUNPerformed.get(actionsUNPerformed.size() - 1);
-		action.execute();
-		actionsPerformed.add(action);
-		if (action.getCommand() == "draw") {
-			shapes.add(action.getReciever(null));
-
-		} else if (action.getCommand() == "remove") {
-			shapes.remove(action.getReciever(null));
-
-		}else if (action.getCommand().equals("update")) {
-			shapes.remove(action.getReciever("old shape"));
-			shapes.add(action.getReciever("new shape"));
+		if (actionsUNPerformed.size() == 0) {
+			return;
+		} else {
+			final ICommand action = actionsUNPerformed.get(actionsUNPerformed.size() - 1);
+			actionsUNPerformed.remove(actionsUNPerformed.size() - 1);
+			action.execute();
+			addCommand(actionsPerformed, action);
+			if (action.getCommand() == "draw") {
+				shapes.add(action.getReciever(null));
+	
+			} else if (action.getCommand() == "remove") {
+				shapes.remove(action.getReciever(null));
+	
+			} else if (action.getCommand().equals("update")) {
+				shapes.remove(action.getReciever("old shape"));
+				shapes.add(action.getReciever("new shape"));
+			}
 		}
 	}
 
@@ -103,34 +113,34 @@ public class Drawer implements DrawingEngine {
 		if (path == null || path.length() < 5) {
 			throw new RuntimeException("Invalid path.");
 		}
-//		String extension = path.substring(path.length() - 6);
-//		if (extension.substring(1).equals(".xml")) {
-//			try {
-//				FileWriter fw = new FileWriter(path);
-//				// TODO: xml saving.
-//				fw.close();
-//			} catch (IOException ioE) {
-//				ioE.printStackTrace();
-//			}
-//		} else if (extension.equals("json")) {
-//			try {
-//				FileWriter fw = new FileWriter(path);
-//				JSONObject jO = new JSONObject();
-//				JSONArray jShapes = new JSONArray();
-//				
-//				JSONArray jActionsPerformed = new JSONArray(actionsPerformed);
-//				JSONArray jActionsUNPerformed = new JSONArray(actionsUNPerformed);
-//				
-//				jO.append("shapes", jShapes);
-//				jO.append("actionsUNPerformed", jActionsPerformed);
-//				jO.append("actionsPerformed", jActionsUNPerformed);
-//				fw.close();
-//			} catch (JSONException jE) {
-//				jE.printStackTrace();
-//			} catch (IOException ioE) {
-//				ioE.printStackTrace();
-//			}
-//		}
+		// String extension = path.substring(path.length() - 6);
+		// if (extension.substring(1).equals(".xml")) {
+		// try {
+		// FileWriter fw = new FileWriter(path);
+		// // TODO: xml saving.
+		// fw.close();
+		// } catch (IOException ioE) {
+		// ioE.printStackTrace();
+		// }
+		// } else if (extension.equals("json")) {
+		// try {
+		// FileWriter fw = new FileWriter(path);
+		// JSONObject jO = new JSONObject();
+		// JSONArray jShapes = new JSONArray();
+		//
+		// JSONArray jActionsPerformed = new JSONArray(actionsPerformed);
+		// JSONArray jActionsUNPerformed = new JSONArray(actionsUNPerformed);
+		//
+		// jO.append("shapes", jShapes);
+		// jO.append("actionsUNPerformed", jActionsPerformed);
+		// jO.append("actionsPerformed", jActionsUNPerformed);
+		// fw.close();
+		// } catch (JSONException jE) {
+		// jE.printStackTrace();
+		// } catch (IOException ioE) {
+		// ioE.printStackTrace();
+		// }
+		// }
 
 	}
 
@@ -138,6 +148,13 @@ public class Drawer implements DrawingEngine {
 	public void load(final String path) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void addCommand(ArrayList<ICommand> array, ICommand command) {
+		if (array.size() == MAX_SIZE) {
+			array.remove(0);
+		}
+		array.add(command);
 	}
 
 }
