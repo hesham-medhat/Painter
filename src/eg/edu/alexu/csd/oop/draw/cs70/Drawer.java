@@ -7,10 +7,38 @@ import java.util.List;
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
+/**
+ * @author Marina
+ * drawer is the implementation for the interface drawing engine
+ * that manipulates the shapes and classes inherited from the class stroke
+ * it adds removes and updates shapes also perform the undo and redo operations
+ *  in addition to save and load with different formats
+ *
+ */
 public class Drawer implements DrawingEngine {
 
+	/**
+	 * a constant number to indicate maximum number of undo and redo allowed and
+	 * the limits of the array list saving the commands performed and
+	 * unperformed
+	 */
+	private static final int MAX_ARRAY_SIZE = 20;
+
+	/**
+	 * an array list containing all shapes on the canvas 
+	 */
+	
 	private final ArrayList<Shape> ShapesOnCanvas = new ArrayList<>();
+	
+	/**
+	 * an array list containing all commands performed to support the undo method with max size 
+	 * 20 commands
+	 */
 	private final ArrayList<ICommand> actionsPerformed = new ArrayList<>();
+	/**
+	 * an array list containing all commands unperformed to support the redo method with max size 
+	 * 20 commands
+	 */
 	private final ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
 
 	@Override
@@ -19,11 +47,19 @@ public class Drawer implements DrawingEngine {
 
 	}
 
+	/**
+	 * @param shape indicate any inherited shape from class stroke
+	 * adds a shape on the canvas
+	 */
+	
 	@Override
 	public void addShape(final Shape shape) {
 		ShapesOnCanvas.add(shape);
+		//create a command object
 		final DrawCommand draw = new DrawCommand(shape);
 		draw.execute();
+		//maintain max size of the array
+		this.roundArray(actionsPerformed);
 		actionsPerformed.add(draw);
 	}
 
@@ -32,6 +68,7 @@ public class Drawer implements DrawingEngine {
 		ShapesOnCanvas.remove(shape);
 		final RemoveCommand remove = new RemoveCommand(shape);
 		remove.execute();
+		this.roundArray(actionsPerformed);
 		actionsPerformed.add(remove);
 	}
 
@@ -41,6 +78,7 @@ public class Drawer implements DrawingEngine {
 		ShapesOnCanvas.add(newShape);
 		UpdateCommand update = new UpdateCommand(oldShape, newShape);
 		update.execute();
+		this.roundArray(actionsPerformed);
 		actionsPerformed.add(update);
 	}
 
@@ -60,6 +98,7 @@ public class Drawer implements DrawingEngine {
 	public void undo() {
 		final ICommand action = actionsPerformed.get(actionsPerformed.size() - 1);
 		action.unexecute();
+		this.roundArray(actionsUNPerformed);
 		actionsUNPerformed.add(action);
 		if (action.getCommand().equals("draw")) {
 			ShapesOnCanvas.remove(action.getReciever(null));
@@ -77,6 +116,7 @@ public class Drawer implements DrawingEngine {
 	public void redo() {
 		final ICommand action = actionsUNPerformed.get(actionsUNPerformed.size() - 1);
 		action.execute();
+		this.roundArray(actionsPerformed);
 		actionsPerformed.add(action);
 		if (action.getCommand() == "draw") {
 			ShapesOnCanvas.add(action.getReciever(null));
@@ -84,7 +124,7 @@ public class Drawer implements DrawingEngine {
 		} else if (action.getCommand() == "remove") {
 			ShapesOnCanvas.remove(action.getReciever(null));
 
-		}else if (action.getCommand().equals("update")) {
+		} else if (action.getCommand().equals("update")) {
 			ShapesOnCanvas.remove(action.getReciever("old shape"));
 			ShapesOnCanvas.add(action.getReciever("new shape"));
 		}
@@ -100,6 +140,13 @@ public class Drawer implements DrawingEngine {
 	public void load(final String path) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void roundArray(ArrayList<ICommand> array) {
+		if (array.size() == MAX_ARRAY_SIZE) {
+			array.remove(0);
+
+		}
 	}
 
 }
