@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONException;
+//import org.json.JSONObject;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;
@@ -103,34 +103,34 @@ public class Drawer implements DrawingEngine {
 		if (path == null || path.length() < 5) {
 			throw new RuntimeException("Invalid path.");
 		}
-		String extension = path.substring(path.length() - 6);
-		if (extension.substring(1).equals(".xml")) {
-			try {
-				FileWriter fw = new FileWriter(path);
-				// TODO: xml saving.
-				fw.close();
-			} catch (IOException ioE) {
-				ioE.printStackTrace();
-			}
-		} else if (extension.equals("json")) {
-			try {
-				FileWriter fw = new FileWriter(path);
-				JSONObject jO = new JSONObject();
-				JSONArray jShapes = new JSONArray();
-				
-				JSONArray jActionsPerformed = new JSONArray(actionsPerformed);
-				JSONArray jActionsUNPerformed = new JSONArray(actionsUNPerformed);
-				
-				jO.append("shapes", jShapes);
-				jO.append("actionsUNPerformed", jActionsPerformed);
-				jO.append("actionsPerformed", jActionsUNPerformed);
-				fw.close();
-			} catch (JSONException jE) {
-				jE.printStackTrace();
-			} catch (IOException ioE) {
-				ioE.printStackTrace();
-			}
-		}
+//		String extension = path.substring(path.length() - 6);
+//		if (extension.substring(1).equals(".xml")) {
+//			try {
+//				FileWriter fw = new FileWriter(path);
+//				// TODO: xml saving.
+//				fw.close();
+//			} catch (IOException ioE) {
+//				ioE.printStackTrace();
+//			}
+//		} else if (extension.equals("json")) {
+//			try {
+//				FileWriter fw = new FileWriter(path);
+//				JSONObject jO = new JSONObject();
+//				JSONArray jShapes = new JSONArray();
+//				
+//				JSONArray jActionsPerformed = new JSONArray(actionsPerformed);
+//				JSONArray jActionsUNPerformed = new JSONArray(actionsUNPerformed);
+//				
+//				jO.append("shapes", jShapes);
+//				jO.append("actionsUNPerformed", jActionsPerformed);
+//				jO.append("actionsPerformed", jActionsUNPerformed);
+//				fw.close();
+//			} catch (JSONException jE) {
+//				jE.printStackTrace();
+//			} catch (IOException ioE) {
+//				ioE.printStackTrace();
+//			}
+//		}
 
 	}
 
