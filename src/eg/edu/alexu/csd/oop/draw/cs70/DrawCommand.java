@@ -1,11 +1,13 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
+import eg.edu.alexu.csd.oop.draw.Shape;
+
 public class DrawCommand implements ICommand {
 
-	private Stroke reciever;
+	private Shape reciever;
 	public static final String COMMAND_TYPE = "draw";
 
-	public DrawCommand(Stroke reciever) {
+	public DrawCommand(Shape reciever) {
 		super();
 		this.reciever = reciever;
 	}
@@ -30,8 +32,10 @@ public class DrawCommand implements ICommand {
 	/**
 	 * @return the reciever
 	 */
-	public Stroke getReciever() {
-		return reciever;
+	public Shape getReciever(String reciever) {
+		return this.reciever;
 	}
+
+	
 
 }

@@ -1,5 +1,7 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
+import eg.edu.alexu.csd.oop.draw.Shape;
+
 public interface ICommand {
 
 	public void execute();
@@ -8,6 +10,6 @@ public interface ICommand {
 
 	public String getCommand();
 
-	public Stroke getReciever();
+	public Shape getReciever(String Reciever);
 
 }

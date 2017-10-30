@@ -1,11 +1,12 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
+import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class RemoveCommand implements ICommand {
-	private Stroke reciever;
+	private Shape reciever;
 	public static final String COMMAND_TYPE = "remove";
 
-	public RemoveCommand(Stroke reciever) {
+	public RemoveCommand(Shape reciever) {
 		super();
 		this.reciever = reciever;
 	}
@@ -25,13 +26,15 @@ public class RemoveCommand implements ICommand {
 	/**
 	 * @return the reciever
 	 */
-	public Stroke getReciever() {
-		return reciever;
+	public Shape getReciever(String reciever) {
+		return this.reciever;
 	}
 
 	@Override
 	public String getCommand() {
 		return COMMAND_TYPE;
 	}
+
+	
 
 }
