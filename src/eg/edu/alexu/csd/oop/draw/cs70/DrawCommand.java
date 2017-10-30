@@ -4,12 +4,12 @@ import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class DrawCommand implements ICommand {
 
-	private Shape reciever;
+	private Shape receiver;
 	public static final String COMMAND_TYPE = "draw";
 
-	public DrawCommand(Shape reciever) {
+	public DrawCommand(Shape receiver) {
 		super();
-		this.reciever = reciever;
+		this.receiver = receiver;
 	}
 
 	@Override
@@ -30,10 +30,10 @@ public class DrawCommand implements ICommand {
 	}
 
 	/**
-	 * @return the reciever
+	 * @return the receiver
 	 */
-	public Shape getReciever(String reciever) {
-		return this.reciever;
+	public Shape getReceiver(String receiver) {
+		return this.receiver;
 	}
 
 	

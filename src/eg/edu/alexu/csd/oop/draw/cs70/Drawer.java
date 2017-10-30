@@ -4,10 +4,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.json.JSONArray;
-//import org.json.JSONException;
-//import org.json.JSONObject;
-
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
@@ -76,12 +72,12 @@ public class Drawer implements DrawingEngine {
 			action.unexecute();
 			addCommand(actionsUNPerformed, action);
 			if (action.getCommand().equals("draw")) {
-				shapes.remove(action.getReciever(null));
+				shapes.remove(action.getReceiver(null));
 			} else if (action.getCommand().equals("remove")) {
-				shapes.add(action.getReciever(null));
+				shapes.add(action.getReceiver(null));
 			} else if (action.getCommand().equals("update")) {
-				shapes.add(action.getReciever("old shape"));
-				shapes.remove(action.getReciever("new shape"));
+				shapes.add(action.getReceiver("old shape"));
+				shapes.remove(action.getReceiver("new shape"));
 			}
 		}
 	}
@@ -95,15 +91,15 @@ public class Drawer implements DrawingEngine {
 			actionsUNPerformed.remove(actionsUNPerformed.size() - 1);
 			action.execute();
 			addCommand(actionsPerformed, action);
-			if (action.getCommand() == "draw") {
-				shapes.add(action.getReciever(null));
+			if (action.getCommand().equals("draw")) {
+				shapes.add(action.getReceiver(null));
 	
-			} else if (action.getCommand() == "remove") {
-				shapes.remove(action.getReciever(null));
+			} else if (action.getCommand().equals("remove")) {
+				shapes.remove(action.getReceiver(null));
 	
 			} else if (action.getCommand().equals("update")) {
-				shapes.remove(action.getReciever("old shape"));
-				shapes.add(action.getReciever("new shape"));
+				shapes.remove(action.getReceiver("old shape"));
+				shapes.add(action.getReceiver("new shape"));
 			}
 		}
 	}
@@ -147,7 +143,6 @@ public class Drawer implements DrawingEngine {
 	@Override
 	public void load(final String path) {
 		// TODO Auto-generated method stub
-
 	}
 
 	private void addCommand(ArrayList<ICommand> array, ICommand command) {

@@ -10,6 +10,6 @@ public interface ICommand {
 
 	public String getCommand();
 
-	public Shape getReciever(String Reciever);
+	public Shape getReceiver(String reciever);
 
 }

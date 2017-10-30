@@ -6,7 +6,7 @@ public class UpdateCommand implements ICommand {
 
 	private Shape oldShape;
 	private Shape newShape;
-	public static final String COMMAND_TYPE = "upddate";
+	public static final String COMMAND_TYPE = "update";
 	public static final String OLD_SHAPE = "old shape";
 	public static final String NEW_SHAPE = "new shape";
 
@@ -34,10 +34,10 @@ public class UpdateCommand implements ICommand {
 	}
 
 	@Override
-	public Shape getReciever(String reciever) {
-		if (reciever.equals(NEW_SHAPE)) {
+	public Shape getReceiver(String receiver) {
+		if (receiver.equals(NEW_SHAPE)) {
 			return newShape;
-		} else if (reciever.equals(OLD_SHAPE)) {
+		} else if (receiver.equals(OLD_SHAPE)) {
 			return oldShape;
 		}
 		return null;
