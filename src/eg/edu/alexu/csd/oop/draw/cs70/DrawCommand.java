@@ -1,5 +1,6 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
+import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class DrawCommand implements ICommand {

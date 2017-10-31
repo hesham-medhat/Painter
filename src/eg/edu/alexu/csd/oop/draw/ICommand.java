@@ -1,6 +1,4 @@
-package eg.edu.alexu.csd.oop.draw.cs70;
-
-import eg.edu.alexu.csd.oop.draw.Shape;
+package eg.edu.alexu.csd.oop.draw;
 
 public interface ICommand {
 

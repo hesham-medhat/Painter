@@ -9,6 +9,7 @@ import java.util.List;
 import javax.json.*;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
+import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class Drawer implements DrawingEngine {
@@ -116,7 +117,7 @@ public class Drawer implements DrawingEngine {
 		String extension = path.substring(path.lastIndexOf('.'));
 		if (extension.equals(".xml")) {
 			//TODO: xml saving.
-		} else if (extension.equals("json")) {
+		} else if (extension.equals(".json")) {
 			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();//For shapes
 			for (Shape sh : shapes) {
 				arrBuilder.add(((Stroke) sh).buildJsonArray());
