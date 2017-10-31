@@ -1,19 +1,23 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
-import javax.json.*;
+import java.net.*;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
+import eg.edu.alexu.csd.oop.draw.Stroke;
 
 public class Drawer implements DrawingEngine {
-	public static final int MAX_SIZE = 20;
+	private static final int MAX_SIZE = 20;
+	private static final String CLASSES_PACKAGE = "bin.eg.edu.alexu.csd.oop.draw.cs70";
 
 	private final ArrayList<Shape> shapes = new ArrayList<>();
 
@@ -61,10 +65,44 @@ public class Drawer implements DrawingEngine {
 		return shapesArr;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<Class<? extends Shape>> getSupportedShapes() {
-		// TODO Auto-generated method stub
-		return null;
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		assert classLoader != null;
+		String path = CLASSES_PACKAGE.replace('.', '/');
+		try {
+			Enumeration<URL> resources = classLoader.getResources(path);
+			List<File> dirs = new ArrayList<File>();
+			while (resources.hasMoreElements()) {
+				URL resource = resources.nextElement();
+				dirs.add(new File(resource.getFile()));
+			}
+			ArrayList<Class<? extends Object>> classes = new ArrayList<Class<? extends Object>>();
+			for (File directory : dirs) {
+				try {
+					classes.add(Class
+							.forName(CLASSES_PACKAGE + '.' + directory.getName().substring(0, directory.getName().length() - 6)));
+				} catch (ClassNotFoundException e) {
+					
+					e.printStackTrace();
+				}
+			}
+			List<Class<? extends Shape>> supportedShapes = new ArrayList<Class<? extends Shape>>();
+			for (@SuppressWarnings("rawtypes") Class candidate : classes) {
+				Class[] implementedInterfaces = candidate.getInterfaces();
+				if (implementedInterfaces.length != 0) {
+					if (implementedInterfaces[0].toString().equals("interface " + Shape.class.getName())) {
+						supportedShapes.add(candidate);
+					}
+				}
+			}
+			return supportedShapes;
+		} catch (IOException ioE) {
+			System.err.println("Failed to get supported shapes.");
+			ioE.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
@@ -98,10 +136,10 @@ public class Drawer implements DrawingEngine {
 			addCommand(actionsPerformed, action);
 			if (action.getCommand().equals("draw")) {
 				shapes.add(action.getReceiver(null));
-	
+
 			} else if (action.getCommand().equals("remove")) {
 				shapes.remove(action.getReceiver(null));
-	
+
 			} else if (action.getCommand().equals("update")) {
 				shapes.remove(action.getReceiver("old shape"));
 				shapes.add(action.getReceiver("new shape"));
@@ -116,9 +154,10 @@ public class Drawer implements DrawingEngine {
 		}
 		String extension = path.substring(path.lastIndexOf('.'));
 		if (extension.equals(".xml")) {
-			//TODO: xml saving.
+			// TODO: xml saving.
 		} else if (extension.equals(".json")) {
-			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();//For shapes
+			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();// For
+																	// shapes
 			for (Shape sh : shapes) {
 				arrBuilder.add(((Stroke) sh).buildJsonArray());
 			}

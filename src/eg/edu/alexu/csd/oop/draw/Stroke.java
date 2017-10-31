@@ -1,4 +1,4 @@
-package eg.edu.alexu.csd.oop.draw.cs70;
+package eg.edu.alexu.csd.oop.draw;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -7,8 +7,6 @@ import java.util.Map;
 
 import javax.json.Json;
 import javax.json.*;
-
-import eg.edu.alexu.csd.oop.draw.Shape;
 
 /**
  * Class of all shapes containing common
