@@ -13,11 +13,10 @@ import java.net.*;
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
-import eg.edu.alexu.csd.oop.draw.Stroke;
 
 public class Drawer implements DrawingEngine {
 	private static final int MAX_SIZE = 20;
-	private static final String CLASSES_PACKAGE = "bin.eg.edu.alexu.csd.oop.draw.cs70";
+	private static final String CLASSES_PACKAGE = ".bin.eg.edu.alexu.csd.oop.draw.cs70";
 
 	private final ArrayList<Shape> shapes = new ArrayList<>();
 
@@ -149,7 +148,7 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void save(final String path) {
-		if (path == null || path.length() < 5 || !path.contains(".")) {
+/*		if (path == null || path.length() < 5 || !path.contains(".")) {
 			throw new RuntimeException("Invalid path.");
 		}
 		String extension = path.substring(path.lastIndexOf('.'));
@@ -171,7 +170,7 @@ public class Drawer implements DrawingEngine {
 		} else {
 			throw new RuntimeException("Invalid extension.");
 		}
-
+*/
 	}
 
 	@Override

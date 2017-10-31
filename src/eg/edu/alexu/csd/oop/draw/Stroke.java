@@ -5,8 +5,7 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.*;
+
 
 /**
  * Class of all shapes containing common
@@ -139,7 +138,7 @@ public abstract class Stroke implements Shape {
 	public abstract Object clone()
 			throws CloneNotSupportedException;
 
-	public JsonArray buildJsonArray() {
+	/*public JsonArray buildJsonArray() {
 		JsonArrayBuilder jBasicB = Json.createArrayBuilder();
 		jBasicB.add(this.toString());
 		float[] colorArr = new float[3];
@@ -163,6 +162,6 @@ public abstract class Stroke implements Shape {
 
 	public String toString() {
 		return this.getClass().getName();
-	}
+	}*/
 
 }
