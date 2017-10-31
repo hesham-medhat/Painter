@@ -1,8 +1,12 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.json.*;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.Shape;
@@ -106,37 +110,27 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void save(final String path) {
-		if (path == null || path.length() < 5) {
+		if (path == null || path.length() < 5 || !path.contains(".")) {
 			throw new RuntimeException("Invalid path.");
 		}
-		// String extension = path.substring(path.length() - 6);
-		// if (extension.substring(1).equals(".xml")) {
-		// try {
-		// FileWriter fw = new FileWriter(path);
-		// // TODO: xml saving.
-		// fw.close();
-		// } catch (IOException ioE) {
-		// ioE.printStackTrace();
-		// }
-		// } else if (extension.equals("json")) {
-		// try {
-		// FileWriter fw = new FileWriter(path);
-		// JSONObject jO = new JSONObject();
-		// JSONArray jShapes = new JSONArray();
-		//
-		// JSONArray jActionsPerformed = new JSONArray(actionsPerformed);
-		// JSONArray jActionsUNPerformed = new JSONArray(actionsUNPerformed);
-		//
-		// jO.append("shapes", jShapes);
-		// jO.append("actionsUNPerformed", jActionsPerformed);
-		// jO.append("actionsPerformed", jActionsUNPerformed);
-		// fw.close();
-		// } catch (JSONException jE) {
-		// jE.printStackTrace();
-		// } catch (IOException ioE) {
-		// ioE.printStackTrace();
-		// }
-		// }
+		String extension = path.substring(path.lastIndexOf('.'));
+		if (extension.equals(".xml")) {
+			//TODO: xml saving.
+		} else if (extension.equals("json")) {
+			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();//For shapes
+			for (Shape sh : shapes) {
+				arrBuilder.add(((Stroke) sh).buildJsonArray());
+			}
+			try {
+				FileWriter writer = new FileWriter(path);
+				JsonWriter jw = Json.createWriter(writer);
+				jw.writeArray(arrBuilder.build());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			throw new RuntimeException("Invalid extension.");
+		}
 
 	}
 

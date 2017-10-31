@@ -5,6 +5,9 @@ import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.json.Json;
+import javax.json.*;
+
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 /**
@@ -137,5 +140,31 @@ public abstract class Stroke implements Shape {
 
 	public abstract Object clone()
 			throws CloneNotSupportedException;
+
+	public JsonArray buildJsonArray() {
+		JsonArrayBuilder jBasicB = Json.createArrayBuilder();
+		jBasicB.add(this.toString());
+		float[] colorArr = new float[3];
+		colorArr = color.getRGBColorComponents(colorArr);
+		float[] fillArr = new float[3];
+		fillArr = color.getRGBColorComponents(fillArr);
+		JsonArrayBuilder colorArrB = Json.createArrayBuilder();
+		JsonArrayBuilder fillArrB = Json.createArrayBuilder();
+		for (int i = 0; i < 3; i++) {
+			colorArrB.add((double) colorArr[i]);
+			fillArrB.add((double) fillArr[i]);
+		}
+		jBasicB.add(colorArrB);
+		jBasicB.add(fillArrB);
+		jBasicB.add(center.getX());
+		jBasicB.add(center.getY());
+		jBasicB.add(strokeWidth);		
+		jBasicB.add(prop.toString());
+		return jBasicB.build();
+	}
+
+	public String toString() {
+		return this.getClass().getName();
+	}
 
 }
