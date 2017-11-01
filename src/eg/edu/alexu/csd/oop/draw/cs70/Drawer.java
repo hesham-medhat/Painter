@@ -1,28 +1,32 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
-import java.net.*;
+import javax.xml.parsers.*;
+//import javax.json.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
-import eg.edu.alexu.csd.oop.draw.Stroke;
 
 public class Drawer implements DrawingEngine {
-	private static final int MAX_SIZE = 20;
-	private static final String CLASSES_PACKAGE = "bin.eg.edu.alexu.csd.oop.draw.cs70";
+	public static final int MAX_SIZE = 20;
 
-	private final ArrayList<Shape> shapes = new ArrayList<>();
+	private ArrayList<Shape> shapes = new ArrayList<Shape>();
 
-	private final ArrayList<ICommand> actionsPerformed = new ArrayList<>();
-	private final ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
+	private ArrayList<ICommand> actionsPerformed = new ArrayList<>();
+	private ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
 
 	@Override
 	public void refresh(final Graphics canvas) {
@@ -65,44 +69,10 @@ public class Drawer implements DrawingEngine {
 		return shapesArr;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<Class<? extends Shape>> getSupportedShapes() {
-		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		assert classLoader != null;
-		String path = CLASSES_PACKAGE.replace('.', '/');
-		try {
-			Enumeration<URL> resources = classLoader.getResources(path);
-			List<File> dirs = new ArrayList<File>();
-			while (resources.hasMoreElements()) {
-				URL resource = resources.nextElement();
-				dirs.add(new File(resource.getFile()));
-			}
-			ArrayList<Class<? extends Object>> classes = new ArrayList<Class<? extends Object>>();
-			for (File directory : dirs) {
-				try {
-					classes.add(Class
-							.forName(CLASSES_PACKAGE + '.' + directory.getName().substring(0, directory.getName().length() - 6)));
-				} catch (ClassNotFoundException e) {
-					
-					e.printStackTrace();
-				}
-			}
-			List<Class<? extends Shape>> supportedShapes = new ArrayList<Class<? extends Shape>>();
-			for (@SuppressWarnings("rawtypes") Class candidate : classes) {
-				Class[] implementedInterfaces = candidate.getInterfaces();
-				if (implementedInterfaces.length != 0) {
-					if (implementedInterfaces[0].toString().equals("interface " + Shape.class.getName())) {
-						supportedShapes.add(candidate);
-					}
-				}
-			}
-			return supportedShapes;
-		} catch (IOException ioE) {
-			System.err.println("Failed to get supported shapes.");
-			ioE.printStackTrace();
-			return null;
-		}
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -136,10 +106,10 @@ public class Drawer implements DrawingEngine {
 			addCommand(actionsPerformed, action);
 			if (action.getCommand().equals("draw")) {
 				shapes.add(action.getReceiver(null));
-
+	
 			} else if (action.getCommand().equals("remove")) {
 				shapes.remove(action.getReceiver(null));
-
+	
 			} else if (action.getCommand().equals("update")) {
 				shapes.remove(action.getReceiver("old shape"));
 				shapes.add(action.getReceiver("new shape"));
@@ -154,20 +124,50 @@ public class Drawer implements DrawingEngine {
 		}
 		String extension = path.substring(path.lastIndexOf('.'));
 		if (extension.equals(".xml")) {
-			// TODO: xml saving.
-		} else if (extension.equals(".json")) {
-			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();// For
-																	// shapes
-			for (Shape sh : shapes) {
-				arrBuilder.add(((Stroke) sh).buildJsonArray());
-			}
+			Document doc;
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			try {
-				FileWriter writer = new FileWriter(path);
-				JsonWriter jw = Json.createWriter(writer);
-				jw.writeArray(arrBuilder.build());
-			} catch (IOException e) {
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				// create instance of DOM
+			    doc = db.newDocument();
+			    Element root = doc.createElement("Shapes");
+			    for (Shape sh : shapes) {
+			    	root.appendChild(((Stroke) sh).buildXMLElement(doc));
+			    }
+			    try {
+		            Transformer tr = TransformerFactory.newInstance().newTransformer();
+		            tr.setOutputProperty(OutputKeys.INDENT, "yes");
+		            tr.setOutputProperty(OutputKeys.METHOD, "xml");
+		            tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+		            tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "roles.dtd");
+		            tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+		            // send DOM to file
+		            tr.transform(new DOMSource(doc),
+		                                 new StreamResult(new FileOutputStream(path)));
+
+		        } catch (TransformerException te) {
+		            System.out.println(te.getMessage());
+		        } catch (IOException ioe) {
+		            System.out.println(ioe.getMessage());
+		        }
+			} catch (ParserConfigurationException e) {
 				e.printStackTrace();
 			}
+
+			
+		} else if (extension.equals("json")) {
+//			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();//For shapes
+//			for (Shape sh : shapes) {
+//				arrBuilder.add(((Stroke) sh).buildJsonArray());
+//			}
+//			try {
+//				FileWriter writer = new FileWriter(path);
+//				JsonWriter jw = Json.createWriter(writer);
+//				jw.writeArray(arrBuilder.build());
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		} else {
 			throw new RuntimeException("Invalid extension.");
 		}
@@ -176,7 +176,31 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void load(final String path) {
-		// TODO Auto-generated method stub
+		if (path == null || path.length() < 5 || !path.contains(".")) {
+			throw new RuntimeException("Invalid path.");
+		}
+		String extension = path.substring(path.lastIndexOf('.'));
+		if (extension.equals(".xml")) {
+			Document dom;
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			 try {
+				 DocumentBuilder db = dbf.newDocumentBuilder();
+				 dom = db.parse(path);
+				 shapes = new ArrayList<Shape>();
+				 NodeList nl = dom.getFirstChild().getChildNodes();
+				 for (int i = 0; i < nl.getLength(); i++) {
+					 Node n = nl.item(i);
+					 shapes.add(Stroke.parseXMLShape(n));
+				 }
+				 
+			 } catch (Exception e) {
+				 e.printStackTrace();
+			 }
+		} else if (extension.equals("json")) {
+			
+		} else {
+			throw new RuntimeException("Invalid extension.");
+		}
 	}
 
 	private void addCommand(ArrayList<ICommand> array, ICommand command) {

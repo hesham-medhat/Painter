@@ -3,7 +3,6 @@ package eg.edu.alexu.csd.oop.draw.cs70;
 import java.awt.Point;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
-import eg.edu.alexu.csd.oop.draw.Stroke;
 
 /**
  * Holds data for circle representation.
