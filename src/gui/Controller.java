@@ -64,7 +64,7 @@ public class Controller {
 	private void makeLine(final ActionEvent e) {
 		drawingNow = "line";
 		setDrawingButtonsDisabled(true);
-		feedback.setText("Set the starting and ending points of the line.");
+		feedback.setText("Set the starting point of the line.");
 	}
 
 	@FXML
@@ -117,6 +117,10 @@ public class Controller {
 		finishDrawing();
 	}
 
+	private void drawCircle() {
+		
+	}
+
 	private void finishDrawing() {
 		firstClick = null;
 		secondClick = null;
@@ -135,6 +139,7 @@ public class Controller {
 			drawingLine.setEndY(me.getY());
 		}
 	}
+
 	@FXML
 	private void paneClick(MouseEvent me) {
 		if (drawingNow == null) {
@@ -144,10 +149,17 @@ public class Controller {
 			firstClick = new Point2D(me.getX(), me.getY());
 			drawingLine = new Line(me.getX(), me.getY(), me.getX(), me.getY());
 			drawingPane.getChildren().add(drawingLine);
+			if (drawingNow.equals("line")) {
+				feedback.setText("Set the ending point of the line.");
+			} else if (drawingNow.equals("circle")) {
+				feedback.setText("Set the circle's radius.");
+			}
 		} else if (secondClick == null) {// Clicked once before.
 			secondClick = new Point2D(me.getX(), me.getY());
-			if ("line".equals(drawingNow)) {
+			if (drawingNow.equals("line")) {
 				drawLine();
+			} else if (drawingNow.equals("circle")) {
+				drawCircle();
 			}
 		} else if (thirdClick == null) {// Clicked twice before.
 			thirdClick = new Point2D(me.getX(), me.getY());
