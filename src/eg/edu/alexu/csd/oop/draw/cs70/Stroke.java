@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 //import javax.json.*;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
+import javafx.scene.layout.Pane;
 
 /**
  * Class of all shapes containing common
@@ -26,6 +27,25 @@ import eg.edu.alexu.csd.oop.draw.Shape;
  *
  */
 public abstract class Stroke implements Shape {
+
+	/**
+	 * JavaFx shape.
+	 */
+	private javafx.scene.shape.Shape fxShape;
+
+	/**
+	 * @return the fxShape
+	 */
+	public javafx.scene.shape.Shape getFxShape() {
+		return fxShape;
+	}
+
+	/**
+	 * @param fxShape the fxShape to set
+	 */
+	public void setFxShape(javafx.scene.shape.Shape fxShape) {
+		this.fxShape = fxShape;
+	}
 
 	/**
 	 * Stroke thickness of the shape's borders.
@@ -122,8 +142,8 @@ public abstract class Stroke implements Shape {
 	}
 
 	@Override
-	public void draw(final java.awt.Graphics canvas) {
-		return;
+	public void draw(Pane drawingPane) {
+		drawingPane.getChildren().add(fxShape);
 	}
 
 	/**

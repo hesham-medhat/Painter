@@ -29,7 +29,7 @@ public class Controller {
 	private JFXButton pluginMaker;
 
 	@FXML
-	private Pane drawingPane;
+	public static Pane drawingPane;
 	private Line drawingLine;
 	@FXML
 	Label feedback;
@@ -48,16 +48,6 @@ public class Controller {
 	public Controller() {
 		drawer = new Drawer();
 		pluginFound = false;
-		/*
-		shapeMakers = new JFXButton[7];
-		shapeMakers[0] = lineMaker;
-		shapeMakers[1] = circleMaker;
-		shapeMakers[2] = recMaker;
-		shapeMakers[3] = squareMaker;
-		shapeMakers[4] = triangleMaker;
-		shapeMakers[5] = ellipseMaker;
-		shapeMakers[6] = pluginMaker;
-		*/
 	}
 
 	private void setDrawingButtonsDisabled(boolean set) {
@@ -122,7 +112,7 @@ public class Controller {
 		Line fxLine = new Line(fpx, fpy, spx, spy);
 		LineSegment line = new LineSegment(fpx, fpy, spx, spy);
 		drawingPane.getChildren().add(fxLine);
-		//TODO: line.setFxShape(fxLine);
+		line.setFxShape(fxLine);
 		drawer.addShape(line);
 		finishDrawing();
 	}
@@ -130,6 +120,7 @@ public class Controller {
 	private void finishDrawing() {
 		firstClick = null;
 		secondClick = null;
+		thirdClick = null;
 		drawingNow = null;
 		drawingPane.getChildren().remove(drawingLine);
 		drawingLine = null;
@@ -138,12 +129,21 @@ public class Controller {
 	}
 
 	@FXML
+	private void moveDrawer(final MouseEvent me) {
+		if (drawingLine != null) {
+			drawingLine.setEndX(me.getX());
+			drawingLine.setEndY(me.getY());
+		}
+	}
+	@FXML
 	private void paneClick(MouseEvent me) {
 		if (drawingNow == null) {
 			return;
 		}
-		if (firstClick == null) {
+		if (firstClick == null) {// Didn't have first click yet.
 			firstClick = new Point2D(me.getX(), me.getY());
+			drawingLine = new Line(me.getX(), me.getY(), me.getX(), me.getY());
+			drawingPane.getChildren().add(drawingLine);
 		} else if (secondClick == null) {// Clicked once before.
 			secondClick = new Point2D(me.getX(), me.getY());
 			if ("line".equals(drawingNow)) {

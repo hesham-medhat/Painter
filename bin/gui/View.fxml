@@ -14,7 +14,7 @@
       <JFXButton fx:id="squareMaker" layoutX="24.0" layoutY="190.0" onAction="#makeSquare" prefHeight="25.0" prefWidth="81.0" text="Square" />
       <JFXButton fx:id="triangleMaker" layoutX="24.0" layoutY="228.0" onAction="#makeTriangle" prefHeight="25.0" prefWidth="81.0" text="Triangle" />
       <JFXButton fx:id="ellipseMaker" layoutX="24.0" layoutY="266.0" onAction="#makeEllipse" prefHeight="25.0" prefWidth="81.0" text="Ellipse" />
-      <Pane fx:id="drawingPane" layoutX="125.0" layoutY="82.0" onMouseClicked="#paneClick" prefHeight="438.0" prefWidth="520.0">
+      <Pane fx:id="drawingPane" layoutX="125.0" layoutY="82.0" onMouseClicked="#paneClick" onMouseMoved="#moveDrawer" prefHeight="438.0" prefWidth="520.0">
          <children>
             <Separator layoutY="-7.0" prefHeight="9.0" prefWidth="520.0" />
             <Separator layoutX="-8.0" orientation="VERTICAL" prefHeight="438.0" prefWidth="16.0" />

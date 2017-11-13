@@ -1,5 +1,7 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import javafx.scene.layout.Pane;
+
 public interface Shape {
 
 	/**
@@ -66,7 +68,7 @@ public interface Shape {
 	/**
 	 * Redraw the shape on the canvas.
 	 */
-	public void draw(java.awt.Graphics canvas);
+	public void draw(Pane drawingPane);
 
 	/**
 	 * Create a deep clone of the shape.
