@@ -2,26 +2,30 @@ package eg.edu.alexu.csd.oop.draw.cs70;
 
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
+import eg.edu.alexu.csd.oop.draw.Stroke;
+import javafx.scene.layout.Pane;
 
 public class DrawCommand implements ICommand {
 
 	private Shape receiver;
-	public static final String COMMAND_TYPE = "draw";
+	private static final String COMMAND_TYPE = "draw";
+	private Pane drawingPane;
 
-	public DrawCommand(Shape receiver) {
+	public DrawCommand(Shape receiverIn, Pane drawingPaneIn) {
 		super();
-		this.receiver = receiver;
+		this.receiver = receiverIn;
+		this.drawingPane = drawingPaneIn;
 	}
 
 	@Override
 	public void execute() {
-		receiver.draw(gui.Controller.drawingPane);
+		receiver.draw(drawingPane);
 
 	}
 
 	@Override
 	public void unexecute() {
-		gui.Controller.drawingPane.getChildren().remove(((Stroke) receiver).getFxShape());
+		drawingPane.getChildren().remove(((Stroke) receiver).getFxShape());
 
 	}
 

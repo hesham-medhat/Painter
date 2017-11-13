@@ -1,28 +1,29 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
-import java.io.*;
+//import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.*;
 //import javax.json.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+//import javax.xml.transform.*;
+//import javax.xml.transform.dom.DOMSource;
+//import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+//import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
+import eg.edu.alexu.csd.oop.draw.Stroke;
+import javafx.scene.layout.Pane;
 
 public class Drawer implements DrawingEngine {
 	private static final int MAX_SIZE = 20;
-	private static final String CLASSES_PACKAGE = ".bin.eg.edu.alexu.csd.oop.draw.cs70";
 
 	private ArrayList<Shape> shapes = new ArrayList<Shape>();
 
@@ -31,20 +32,19 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void refresh(final Graphics canvas) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void addShape(final Shape shape) {
+	public void addShape(final Shape shape, Pane drawingPane) {
 		shapes.add(shape);
-		final DrawCommand draw = new DrawCommand(shape);
+		final DrawCommand draw = new DrawCommand(shape, drawingPane);
 		draw.execute();
 		addCommand(actionsPerformed, draw);
 	}
 
 	@Override
-	public void removeShape(final Shape shape) {
+	public void removeShape(final Shape shape, Pane drawingPane) {
 		shapes.remove(shape);
 		final RemoveCommand remove = new RemoveCommand(shape);
 		remove.execute();
@@ -52,7 +52,7 @@ public class Drawer implements DrawingEngine {
 	}
 
 	@Override
-	public void updateShape(final Shape oldShape, final Shape newShape) {
+	public void updateShape(final Shape oldShape, final Shape newShape, Pane drawingPane) {
 		shapes.remove(oldShape);
 		shapes.add(newShape);
 		UpdateCommand update = new UpdateCommand(oldShape, newShape);

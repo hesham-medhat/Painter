@@ -29,7 +29,7 @@ public class Controller {
 	private JFXButton pluginMaker;
 
 	@FXML
-	public static Pane drawingPane;
+	public Pane drawingPane;
 	private Line drawingLine;
 	@FXML
 	Label feedback;
@@ -111,14 +111,20 @@ public class Controller {
 		double spy = secondClick.getY();
 		Line fxLine = new Line(fpx, fpy, spx, spy);
 		LineSegment line = new LineSegment(fpx, fpy, spx, spy);
-		drawingPane.getChildren().add(fxLine);
 		line.setFxShape(fxLine);
-		drawer.addShape(line);
+		drawer.addShape(line, drawingPane);
 		finishDrawing();
 	}
 
 	private void drawCircle() {
-		
+		double rpx = firstClick.getX();
+		double rpy = firstClick.getY();
+		double radius = firstClick.distance(secondClick);
+		Circle circle = new Circle(radius, rpx, rpy);
+		javafx.scene.shape.Circle fxCircle = new javafx.scene.shape.Circle(rpx, rpy, radius);
+		circle.setFxShape(fxCircle);
+		drawer.addShape(circle, drawingPane);
+		finishDrawing();
 	}
 
 	private void finishDrawing() {
