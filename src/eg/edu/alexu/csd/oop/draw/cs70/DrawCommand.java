@@ -15,13 +15,13 @@ public class DrawCommand implements ICommand {
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		receiver.draw(gui.Controller.drawingPane);
 
 	}
 
 	@Override
 	public void unexecute() {
-		// TODO Auto-generated method stub
+		gui.Controller.drawingPane.getChildren().remove(((Stroke) receiver).getFxShape());
 
 	}
 
