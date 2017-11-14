@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 public class Controller {
 
@@ -31,9 +32,8 @@ public class Controller {
 	@FXML
 	public Pane drawingPane;
 	private Line drawingLine1;
-	private Line drawingLine2;
-	private Line drawingLine3;
-	private Line drawingLine4;
+	private Rectangle drawingRec;
+	private javafx.scene.shape.Ellipse drawingEllipse;
 	@FXML
 	Label feedback;
 	private Point2D firstClick;
@@ -98,6 +98,7 @@ public class Controller {
 	private void makeEllipse(final ActionEvent e) {
 		drawingNow = "ellipse";
 		setDrawingButtonsDisabled(true);
+		feedback.setText("Set the ellipse's center.");
 	}
 
 	@FXML
@@ -128,16 +129,24 @@ public class Controller {
 		drawer.addShape(circle, drawingPane);
 		finishDrawing();
 	}
-	
+
 	private void drawEllipse() {
 		double rpx = firstClick.getX();
 		double rpy = firstClick.getY();
-		double radiusX = firstClick.distance(secondClick);
-		double radiusY = thirdClick.distance(secondClick);
+		double radiusX = Math.abs(firstClick.getX() - secondClick.getX());
+		double radiusY = Math.abs(firstClick.getY() - thirdClick.getY());
 		Ellipse ellipse = new Ellipse(radiusX, radiusY, rpx, rpy);
-		javafx.scene.shape.Ellipse fxEllipse = new javafx.scene.shape.Ellipse(radiusX,radiusY,rpx, rpy);
-		ellipse.setFxShape(fxEllipse);
+		ellipse.setFxShape(drawingEllipse);
+		drawingPane.getChildren().remove(drawingEllipse);
 		drawer.addShape(ellipse, drawingPane);
+		finishDrawing();
+	}
+	
+	private void drawRec() {
+		eg.edu.alexu.csd.oop.draw.cs70.Rectangle rectangle = new eg.edu.alexu.csd.oop.draw.cs70.Rectangle(firstClick.getX(), firstClick.getY(), Math.abs(firstClick.getX() - secondClick.getX()), Math.abs(firstClick.getY() - thirdClick.getY()));
+		rectangle.setFxShape(drawingRec);
+		drawingPane.getChildren().remove(drawingRec);
+		drawer.addShape(rectangle, drawingPane);
 		finishDrawing();
 	}
 
@@ -148,9 +157,8 @@ public class Controller {
 		drawingNow = null;
 		drawingPane.getChildren().remove(drawingLine1);
 		drawingLine1 = null;
-		drawingLine2 = null;
-		drawingLine3 = null;
-		drawingLine4 = null;
+		drawingRec = null;
+		drawingEllipse = null;
 		setDrawingButtonsDisabled(false);
 		feedback.setText("");
 	}
@@ -159,11 +167,17 @@ public class Controller {
 	private void moveDrawer(final MouseEvent me) {
 		if (drawingLine1 != null) {
 			if (drawingNow.equals("rec")) {
-				if (drawingLine2 != null) {
-					drawingLine2.setEndY(me.getY());
-					drawingLine3.setEndY(me.getY());
-					drawingLine4.setEndY(me.getY());
-					drawingLine4.setStartY(me.getY());
+				if (drawingRec != null) {
+					drawingRec.setHeight(Math.abs(me.getY() - firstClick.getY()));
+				} else {
+					if (me.getX() >= firstClick.getX()) {
+						drawingLine1.setEndX(me.getX());
+					}
+				}
+			} else if (drawingNow.equals("ellipse")) {
+				if (drawingEllipse != null) {
+					drawingEllipse.setRadiusY(Math.abs(me.getY() - firstClick.getY()));
+
 				} else {
 					drawingLine1.setEndX(me.getX());
 				}
@@ -172,6 +186,7 @@ public class Controller {
 				drawingLine1.setEndY(me.getY());
 			}
 		}
+
 	}
 
 	@FXML
@@ -189,6 +204,8 @@ public class Controller {
 				feedback.setText("Set the circle's radius.");
 			} else if (drawingNow.equals("rec")) {
 				feedback.setText("Set the rectangle's upper-right corner.");
+			} else if (drawingNow.equals("ellipse")) {
+				feedback.setText("Set the ellipse's width.");
 			}
 		} else if (secondClick == null) {// Clicked once before.
 			secondClick = new Point2D(me.getX(), me.getY());
@@ -198,16 +215,25 @@ public class Controller {
 				drawCircle();
 			} else if (drawingNow.equals("rec")) {
 				secondClick = new Point2D(me.getX(), firstClick.getY());
-				drawingLine2 = new Line(secondClick.getX(), secondClick.getY(), secondClick.getX(), me.getY());
-				drawingLine3 = new Line(firstClick.getX(), firstClick.getY(), firstClick.getX(), me.getY());
-				drawingLine4 = new Line(firstClick.getX(), me.getY(), secondClick.getX(), me.getY());
-				drawingPane.getChildren().add(drawingLine2);
-				drawingPane.getChildren().add(drawingLine3);
-				drawingPane.getChildren().add(drawingLine4);
+				drawingRec = new Rectangle(firstClick.getX(), firstClick.getY(),
+						Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+				drawingPane.getChildren().add(drawingRec);
 				feedback.setText("Set the rectangle's lower-right corner.");
+			} else if (drawingNow.equals("ellipse")) {
+				secondClick = new Point2D(me.getX(), firstClick.getY());
+				drawingEllipse = new javafx.scene.shape.Ellipse(firstClick.getX(), firstClick.getY(),
+						Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+				drawingPane.getChildren().add(drawingEllipse);
+				feedback.setText("Set the ellipse's height.");
 			}
 		} else if (thirdClick == null) {// Clicked twice before.
 			thirdClick = new Point2D(me.getX(), me.getY());
+			if (drawingNow.equals("rec")) {
+				drawRec();
+			} else if (drawingNow.equals("ellipse")) {
+				drawEllipse();
+			}
+
 		}
 	}
 
