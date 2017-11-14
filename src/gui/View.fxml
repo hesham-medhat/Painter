@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="559.0" prefWidth="675.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
+<AnchorPane prefHeight="630.0" prefWidth="738.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controller">
    <children>
-      <JFXButton fx:id="lineMaker" layoutX="24.0" layoutY="84.0" onAction="#makeLine" prefHeight="25.0" prefWidth="81.0" text="Line" />
-      <JFXButton fx:id="circleMaker" layoutX="24.0" layoutY="121.0" onAction="#makeCircle" prefHeight="25.0" prefWidth="81.0" text="Circle" />
-      <JFXButton fx:id="recMaker" layoutX="24.0" layoutY="156.0" onAction="#makeRec" prefHeight="25.0" prefWidth="81.0" text="Rectangle" />
-      <JFXButton fx:id="squareMaker" layoutX="24.0" layoutY="190.0" onAction="#makeSquare" prefHeight="25.0" prefWidth="81.0" text="Square" />
-      <JFXButton fx:id="triangleMaker" layoutX="24.0" layoutY="228.0" onAction="#makeTriangle" prefHeight="25.0" prefWidth="81.0" text="Triangle" />
-      <JFXButton fx:id="ellipseMaker" layoutX="24.0" layoutY="266.0" onAction="#makeEllipse" prefHeight="25.0" prefWidth="81.0" text="Ellipse" />
-      <Pane fx:id="drawingPane" layoutX="125.0" layoutY="82.0" onMouseClicked="#paneClick" onMouseMoved="#moveDrawer" prefHeight="438.0" prefWidth="520.0">
+      <JFXButton fx:id="lineMaker" layoutX="24.0" layoutY="112.0" onAction="#makeLine" prefHeight="25.0" prefWidth="81.0" text="Line" />
+      <JFXButton fx:id="circleMaker" layoutX="24.0" layoutY="152.0" onAction="#makeCircle" prefHeight="25.0" prefWidth="81.0" text="Circle" />
+      <JFXButton fx:id="recMaker" layoutX="24.0" layoutY="227.0" onAction="#makeRec" prefHeight="25.0" prefWidth="81.0" text="Rectangle" />
+      <JFXButton fx:id="squareMaker" layoutX="24.0" layoutY="189.0" onAction="#makeSquare" prefHeight="25.0" prefWidth="81.0" text="Square" />
+      <JFXButton fx:id="triangleMaker" layoutX="24.0" layoutY="264.0" onAction="#makeTriangle" prefHeight="25.0" prefWidth="81.0" text="Triangle" />
+      <JFXButton fx:id="ellipseMaker" layoutX="24.0" layoutY="305.0" onAction="#makeEllipse" prefHeight="25.0" prefWidth="81.0" text="Ellipse" />
+      <Pane fx:id="drawingPane" layoutX="133.0" layoutY="112.0" onMouseClicked="#paneClick" onMouseMoved="#moveDrawer" prefHeight="466.0" prefWidth="586.0">
          <children>
-            <Separator layoutY="-7.0" prefHeight="9.0" prefWidth="520.0" />
-            <Separator layoutX="-8.0" orientation="VERTICAL" prefHeight="438.0" prefWidth="16.0" />
-            <Separator layoutY="437.0" prefHeight="9.0" prefWidth="520.0" />
-            <Separator layoutX="517.0" orientation="VERTICAL" prefHeight="438.0" prefWidth="7.0" />
+            <Separator layoutY="-7.0" prefHeight="9.0" prefWidth="586.0" />
+            <Separator layoutX="-8.0" orientation="VERTICAL" prefHeight="466.0" prefWidth="16.0" />
+            <Separator layoutY="462.0" prefHeight="9.0" prefWidth="586.0" />
+            <Separator layoutX="587.0" orientation="VERTICAL" prefHeight="466.0" prefWidth="3.0" />
          </children>
       </Pane>
-      <Label fx:id="feedback" layoutX="125.0" layoutY="58.0" prefHeight="17.0" prefWidth="520.0" text="Start by picking what to draw!" textFill="#3300ff" />
-      <Separator layoutX="11.0" layoutY="297.0" prefHeight="9.0" prefWidth="107.0" />
-      <JFXButton fx:id="pluginMaker" layoutX="25.0" layoutY="401.0" onAction="#makePlugin" text="Draw Shape" />
-      <Label layoutX="8.0" layoutY="319.0" text="Custom Shape Plugin" />
-      <JFXButton fx:id="pluginFinder" layoutX="27.0" layoutY="359.0" text="Find plugin" />
-      <JFXButton layoutX="576.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Load" />
-      <JFXButton layoutX="477.0" layoutY="24.0" prefHeight="25.0" prefWidth="81.0" text="Save" />
-      <JFXButton layoutX="393.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Redo" />
-      <JFXButton layoutX="300.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Undo" />
+      <Label fx:id="feedback" layoutX="133.0" layoutY="88.0" prefHeight="17.0" prefWidth="586.0" text="Start by picking what to draw!" textFill="#3300ff" />
+      <Separator layoutX="11.0" layoutY="341.0" prefHeight="9.0" prefWidth="107.0" />
+      <JFXButton fx:id="pluginMaker" layoutX="25.0" layoutY="438.0" onAction="#makePlugin" text="Draw Shape" />
+      <Label layoutX="8.0" layoutY="358.0" text="Custom Shape Plugin" textFill="#2e8cc6" />
+      <JFXButton fx:id="pluginFinder" layoutX="27.0" layoutY="391.0" text="Find plugin" />
+      <JFXButton layoutX="628.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Load" />
+      <JFXButton layoutX="541.0" layoutY="24.0" prefHeight="25.0" prefWidth="81.0" text="Save" />
+      <JFXButton layoutX="459.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Redo" />
+      <JFXButton layoutX="367.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Undo" />
+      <JFXButton fx:id="remove" layoutX="628.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Remove" />
+      <JFXButton fx:id="copy" layoutX="544.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Copy" />
+      <JFXButton layoutX="459.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Move" />
+      <JFXButton layoutX="367.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Select" />
+      <Label layoutX="30.0" layoutY="19.0" prefHeight="61.0" prefWidth="204.0" text="PAINTER" textFill="RED">
+         <font>
+            <Font name="Ravie" size="34.0" />
+         </font>
+      </Label>
+      <ColorPicker layoutX="433.0" layoutY="585.0" prefHeight="25.0" prefWidth="96.0" />
+      <ColorPicker layoutX="203.0" layoutY="585.0" />
+      <Label layoutX="133.0" layoutY="589.0" text="Fill Colour:" textFill="#2900ff" />
+      <Label layoutX="341.0" layoutY="589.0" text="Border Colour:" textFill="#2b00ff" />
+      <JFXButton layoutX="618.0" layoutY="585.0" prefHeight="25.0" prefWidth="96.0" text="Apply Colours" />
    </children>
 </AnchorPane>
