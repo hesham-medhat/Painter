@@ -43,6 +43,7 @@ public class Drawer implements DrawingEngine {
 		final DrawCommand draw = new DrawCommand(shape, drawingPane);
 		draw.execute();
 		addCommand(actionsPerformed, draw);
+		actionsUNPerformed.clear();
 	}
 
 	@Override
