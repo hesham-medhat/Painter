@@ -37,7 +37,6 @@ public class Controller {
 	private Point2D secondClick;
 	private Point2D thirdClick;
 
-	private boolean pluginFound;
 	private String drawingNow;
 
 	/**
@@ -47,7 +46,6 @@ public class Controller {
 
 	public Controller() {
 		drawer = new Drawer();
-		pluginFound = false;
 	}
 
 	private void setDrawingButtonsDisabled(boolean set) {

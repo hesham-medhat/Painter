@@ -1,8 +1,8 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
-import java.io.File;
-import java.net.URL;
+//import java.io.File;
+//import java.net.URL;
 //import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,35 +72,28 @@ public class Drawer implements DrawingEngine {
 		return shapesArr;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<Class<? extends Shape>> getSupportedShapes() {
-		ArrayList<Class<? extends Shape>> result = new ArrayList<>();
+		List<Class<? extends Shape>> result = new ArrayList<>();
 		Class<? extends Shape> shape ;
 		try {
-			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Circle").newInstance();
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Circle");
 			result.add(shape);
-			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Ellipse").newInstance();
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Ellipse");
 			result.add(shape);
-			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.LineSegment").newInstance();
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.LineSegment");
 			result.add(shape);
-			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Rectangle").newInstance();
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Rectangle");
 			result.add(shape);
-			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Square").newInstance();
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Square");
 			result.add(shape);
-			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Triangle").newInstance();
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Triangle");
 			result.add(shape);
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return null;
+		return result;
 	}
 
 	@Override
