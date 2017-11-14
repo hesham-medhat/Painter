@@ -30,7 +30,10 @@ public class Controller {
 
 	@FXML
 	public Pane drawingPane;
-	private Line drawingLine;
+	private Line drawingLine1;
+	private Line drawingLine2;
+	private Line drawingLine3;
+	private Line drawingLine4;
 	@FXML
 	Label feedback;
 	private Point2D firstClick;
@@ -78,6 +81,7 @@ public class Controller {
 	private void makeRec(final ActionEvent e) {
 		drawingNow = "rec";
 		setDrawingButtonsDisabled(true);
+		feedback.setText("Set the rectangle's upper-left corner.");
 	}
 
 	@FXML
@@ -132,17 +136,31 @@ public class Controller {
 		secondClick = null;
 		thirdClick = null;
 		drawingNow = null;
-		drawingPane.getChildren().remove(drawingLine);
-		drawingLine = null;
+		drawingPane.getChildren().remove(drawingLine1);
+		drawingLine1 = null;
+		drawingLine2 = null;
+		drawingLine3 = null;
+		drawingLine4 = null;
 		setDrawingButtonsDisabled(false);
 		feedback.setText("");
 	}
 
 	@FXML
 	private void moveDrawer(final MouseEvent me) {
-		if (drawingLine != null) {
-			drawingLine.setEndX(me.getX());
-			drawingLine.setEndY(me.getY());
+		if (drawingLine1 != null) {
+			if (drawingNow.equals("rec")) {
+				if (drawingLine2 != null) {
+					drawingLine2.setEndY(me.getY());
+					drawingLine3.setEndY(me.getY());
+					drawingLine4.setEndY(me.getY());
+					drawingLine4.setStartY(me.getY());
+				} else {
+					drawingLine1.setEndX(me.getX());
+				}
+			} else {
+				drawingLine1.setEndX(me.getX());
+				drawingLine1.setEndY(me.getY());
+			}
 		}
 	}
 
@@ -153,12 +171,14 @@ public class Controller {
 		}
 		if (firstClick == null) {// Didn't have first click yet.
 			firstClick = new Point2D(me.getX(), me.getY());
-			drawingLine = new Line(me.getX(), me.getY(), me.getX(), me.getY());
-			drawingPane.getChildren().add(drawingLine);
+			drawingLine1 = new Line(me.getX(), me.getY(), me.getX(), me.getY());
+			drawingPane.getChildren().add(drawingLine1);
 			if (drawingNow.equals("line")) {
 				feedback.setText("Set the ending point of the line.");
 			} else if (drawingNow.equals("circle")) {
 				feedback.setText("Set the circle's radius.");
+			} else if (drawingNow.equals("rec")) {
+				feedback.setText("Set the rectangle's upper-right corner.");
 			}
 		} else if (secondClick == null) {// Clicked once before.
 			secondClick = new Point2D(me.getX(), me.getY());
@@ -166,6 +186,15 @@ public class Controller {
 				drawLine();
 			} else if (drawingNow.equals("circle")) {
 				drawCircle();
+			} else if (drawingNow.equals("rec")) {
+				secondClick = new Point2D(me.getX(), firstClick.getY());
+				drawingLine2 = new Line(secondClick.getX(), secondClick.getY(), secondClick.getX(), me.getY());
+				drawingLine3 = new Line(firstClick.getX(), firstClick.getY(), firstClick.getX(), me.getY());
+				drawingLine4 = new Line(firstClick.getX(), me.getY(), secondClick.getX(), me.getY());
+				drawingPane.getChildren().add(drawingLine2);
+				drawingPane.getChildren().add(drawingLine3);
+				drawingPane.getChildren().add(drawingLine4);
+				feedback.setText("Set the rectangle's lower-right corner.");
 			}
 		} else if (thirdClick == null) {// Clicked twice before.
 			thirdClick = new Point2D(me.getX(), me.getY());
