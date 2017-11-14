@@ -1,6 +1,8 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
+import java.io.File;
+import java.net.URL;
 //import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +74,32 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public List<Class<? extends Shape>> getSupportedShapes() {
-		// TODO Auto-generated method stub
+		ArrayList<Class<? extends Shape>> result = new ArrayList<>();
+		Class<? extends Shape> shape ;
+		try {
+			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Circle").newInstance();
+			result.add(shape);
+			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Ellipse").newInstance();
+			result.add(shape);
+			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.LineSegment").newInstance();
+			result.add(shape);
+			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Rectangle").newInstance();
+			result.add(shape);
+			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Square").newInstance();
+			result.add(shape);
+			shape =  (Class<? extends Shape>) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Triangle").newInstance();
+			result.add(shape);
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 
