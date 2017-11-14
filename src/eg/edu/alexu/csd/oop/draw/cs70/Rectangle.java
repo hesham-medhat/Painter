@@ -13,6 +13,20 @@ import eg.edu.alexu.csd.oop.draw.Stroke;
 public class Rectangle extends Stroke {
 
 	/**
+	 * Empty constructor.
+	 */
+	public Rectangle() {
+		super();
+		prop.put("ulx", 0.0);
+		prop.put("uly", 0.0);
+		prop.put("width", 0.0);
+		prop.put("height", 0.0);
+		prop.put("rotated", 0.0);
+		center.x = 0;
+		center.y = 0;
+	}
+
+	/**
 	 * Constructor if props were given as is.
 	 * @param ulx upper left corner's x-coordinate.
 	 * @param uly upper left corner's y-coordinate.

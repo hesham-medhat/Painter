@@ -1,6 +1,8 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
+//import java.io.File;
+//import java.net.URL;
 //import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class Drawer implements DrawingEngine {
 		final DrawCommand draw = new DrawCommand(shape, drawingPane);
 		draw.execute();
 		addCommand(actionsPerformed, draw);
+		actionsUNPerformed.clear();
 	}
 
 	@Override
@@ -70,10 +73,28 @@ public class Drawer implements DrawingEngine {
 		return shapesArr;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<Class<? extends Shape>> getSupportedShapes() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Class<? extends Shape>> result = new ArrayList<>();
+		Class<? extends Shape> shape ;
+		try {
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Circle");
+			result.add(shape);
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Ellipse");
+			result.add(shape);
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.LineSegment");
+			result.add(shape);
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Rectangle");
+			result.add(shape);
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Square");
+			result.add(shape);
+			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Triangle");
+			result.add(shape);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 	@Override
