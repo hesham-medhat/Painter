@@ -124,6 +124,18 @@ public class Controller {
 		drawer.addShape(circle, drawingPane);
 		finishDrawing();
 	}
+	
+	private void drawEllipse() {
+		double rpx = firstClick.getX();
+		double rpy = firstClick.getY();
+		double radiusX = firstClick.distance(secondClick);
+		double radiusY = thirdClick.distance(secondClick);
+		Ellipse ellipse = new Ellipse(radiusX, radiusY, rpx, rpy);
+		javafx.scene.shape.Ellipse fxEllipse = new javafx.scene.shape.Ellipse(radiusX,radiusY,rpx, rpy);
+		ellipse.setFxShape(fxEllipse);
+		drawer.addShape(ellipse, drawingPane);
+		finishDrawing();
+	}
 
 	private void finishDrawing() {
 		firstClick = null;
