@@ -7,6 +7,7 @@ import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class ShapeController {
@@ -51,6 +52,19 @@ public class ShapeController {
 			e.printStackTrace();
 		}
 		drawer.addShape(newShape, drawingPane);
+	}
+
+	/**
+	 * Returns the RGB awt color equivalent of the fxColour.
+	 * @param fxColour as paint.
+	 * @return java.awt.Color equivalent.
+	 */
+	public static java.awt.Color getSwingColour(Color fxColour) {
+		java.awt.Color color = new java.awt.Color(
+				(int) fxColour.getRed(),
+				(int) fxColour.getGreen(),
+				(int) fxColour.getBlue());
+		return color;
 	}
 
 }

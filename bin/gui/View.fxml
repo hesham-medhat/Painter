@@ -35,15 +35,15 @@
       <JFXButton layoutX="367.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Undo" />
       <JFXButton fx:id="remove" layoutX="628.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Remove" />
       <JFXButton fx:id="copy" layoutX="544.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Copy" />
-      <JFXButton layoutX="459.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Move" />
-      <JFXButton layoutX="367.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Select" />
+      <JFXButton fx:id="move" layoutX="459.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Move" />
+      <JFXButton fx:id="select" layoutX="367.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Select" />
       <Label layoutX="30.0" layoutY="19.0" prefHeight="61.0" prefWidth="204.0" text="PAINTER" textFill="RED">
          <font>
             <Font name="Ravie" size="34.0" />
          </font>
       </Label>
-      <ColorPicker layoutX="433.0" layoutY="585.0" prefHeight="25.0" prefWidth="96.0" />
-      <ColorPicker layoutX="203.0" layoutY="585.0" />
+      <ColorPicker fx:id="bcPicker" layoutX="433.0" layoutY="585.0" prefHeight="25.0" prefWidth="96.0" />
+      <ColorPicker fx:id="fcPicker" layoutX="203.0" layoutY="585.0" />
       <Label layoutX="133.0" layoutY="589.0" text="Fill Colour:" textFill="#2900ff" />
       <Label layoutX="341.0" layoutY="589.0" text="Border Colour:" textFill="#2b00ff" />
       <JFXButton layoutX="618.0" layoutY="585.0" prefHeight="25.0" prefWidth="96.0" text="Apply Colours" />

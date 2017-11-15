@@ -8,12 +8,15 @@ import eg.edu.alexu.csd.oop.draw.cs70.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public class Controller {
 
@@ -39,7 +42,13 @@ public class Controller {
 	private JFXButton select;
 	@FXML
 	private JFXButton move;
+	@FXML
+	private ColorPicker fcPicker;
+	@FXML
+	private ColorPicker bcPicker;
 
+	@FXML
+	Label feedback;
 	@FXML
 	public Pane drawingPane;
 	private Line drawingLine;
@@ -48,12 +57,11 @@ public class Controller {
 	private javafx.scene.shape.Ellipse drawingEllipse;
 	private javafx.scene.shape.Circle drawingCircle;
 	private javafx.scene.shape.Polygon drawingTriangle;
-	@FXML
-	Label feedback;
 	private Point2D firstClick;
 	private Point2D secondClick;
 	private Point2D thirdClick;
-
+	private Color fc;
+	private Color bc;
 	private String drawingNow;
 
 	/**
@@ -66,6 +74,11 @@ public class Controller {
 		drawer = new Drawer();
 	}
 
+	private void readColours() {
+		fc = fcPicker.getValue();
+		bc = bcPicker.getValue();
+	}
+
 	private void setDrawingButtonsDisabled(boolean set) {
 		lineMaker.setDisable(set);
 		circleMaker.setDisable(set);
@@ -74,10 +87,22 @@ public class Controller {
 		triangleMaker.setDisable(set);
 		ellipseMaker.setDisable(set);
 		pluginMaker.setDisable(set);
+		fcPicker.setDisable(set);
+		bcPicker.setDisable(set);
+	}
+
+	/**
+	 * Colors the given fxShape.
+	 * @param visual fxShape.
+	 */
+	private void colorShape(Shape visual) {
+		visual.setFill(fc);
+		visual.setStroke(bc);
 	}
 
 	@FXML
 	private void makeLine(final ActionEvent e) {
+		readColours();
 		drawingNow = "line";
 		setDrawingButtonsDisabled(true);
 		feedback.setText("Set the starting point of the line.");
@@ -85,6 +110,7 @@ public class Controller {
 
 	@FXML
 	private void makeCircle(final ActionEvent e) {
+		readColours();
 		drawingNow = "circle";
 		setDrawingButtonsDisabled(true);
 		feedback.setText("Set the circle's center.");
@@ -92,6 +118,7 @@ public class Controller {
 
 	@FXML
 	private void makeRec(final ActionEvent e) {
+		readColours();
 		drawingNow = "rec";
 		setDrawingButtonsDisabled(true);
 		feedback.setText("Set the rectangle's upper-left corner.");
@@ -99,6 +126,7 @@ public class Controller {
 
 	@FXML
 	private void makeSquare(final ActionEvent e) {
+		readColours();
 		drawingNow = "square";
 		setDrawingButtonsDisabled(true);
 		feedback.setText("Set the square's upper-left corner.");
@@ -107,13 +135,15 @@ public class Controller {
 
 	@FXML
 	private void makeTriangle(final ActionEvent e) {
+		readColours();
 		drawingNow = "triangle";
 		setDrawingButtonsDisabled(true);
-		feedback.setText("Set the triangle's first corner.");
+		feedback.setText("Set the triangle's first vertex.");
 	}
 
 	@FXML
 	private void makeEllipse(final ActionEvent e) {
+		readColours();
 		drawingNow = "ellipse";
 		setDrawingButtonsDisabled(true);
 		feedback.setText("Set the ellipse's center.");
@@ -121,6 +151,7 @@ public class Controller {
 
 	@FXML
 	private void makePlugin(final ActionEvent e) {
+		readColours();
 		drawingNow = "plugin";
 		setDrawingButtonsDisabled(true);
 	}
@@ -133,6 +164,8 @@ public class Controller {
 		LineSegment line = new LineSegment(fpx, fpy, spx, spy);
 		line.setFxShape(drawingLine);
 		drawingPane.getChildren().remove(drawingLine);
+		line.setColor(ShapeController.getSwingColour(bc));
+		line.setFillColor(ShapeController.getSwingColour(fc));
 		drawer.addShape(line, drawingPane);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, line);
 		shapeControllerList.add(shapeController);
@@ -145,6 +178,8 @@ public class Controller {
 		double radius = drawingLineLength;
 		Circle circle = new Circle(radius, rpx, rpy);
 		circle.setFxShape(drawingCircle);
+		circle.setColor(ShapeController.getSwingColour(bc));
+		circle.setFillColor(ShapeController.getSwingColour(fc));
 		drawingPane.getChildren().remove(drawingCircle);
 		drawer.addShape(circle, drawingPane);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, circle);
@@ -158,6 +193,8 @@ public class Controller {
 		double radiusX = Math.abs(firstClick.getX() - secondClick.getX());
 		double radiusY = Math.abs(firstClick.getY() - thirdClick.getY());
 		Ellipse ellipse = new Ellipse(radiusX, radiusY, rpx, rpy);
+		ellipse.setColor(ShapeController.getSwingColour(bc));
+		ellipse.setFillColor(ShapeController.getSwingColour(fc));
 		ellipse.setFxShape(drawingEllipse);
 		drawingPane.getChildren().remove(drawingEllipse);
 		drawer.addShape(ellipse, drawingPane);
@@ -171,6 +208,8 @@ public class Controller {
 				firstClick.getX(), firstClick.getY(), Math.abs(firstClick.getX() - secondClick.getX()),
 				Math.abs(firstClick.getY() - thirdClick.getY()));
 		rectangle.setFxShape(drawingRec);
+		rectangle.setColor(ShapeController.getSwingColour(bc));
+		rectangle.setFillColor(ShapeController.getSwingColour(fc));
 		drawingPane.getChildren().remove(drawingRec);
 		drawer.addShape(rectangle, drawingPane);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, rectangle);
@@ -183,6 +222,8 @@ public class Controller {
 				firstClick.getX(), firstClick.getY(), Math.abs(firstClick.getX() - secondClick.getX()),
 				Math.abs(firstClick.getY() - secondClick.getY()));
 		square.setFxShape(drawingRec);
+		square.setColor(ShapeController.getSwingColour(bc));
+		square.setFillColor(ShapeController.getSwingColour(fc));
 		drawingPane.getChildren().remove(drawingRec);
 		drawer.addShape(square, drawingPane);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, square);
@@ -195,6 +236,8 @@ public class Controller {
 				firstClick.getX(), secondClick.getX(), thirdClick.getX(), firstClick.getY(), secondClick.getY(),
 				thirdClick.getY());
 		triangle.setFxShape(drawingTriangle);
+		triangle.setColor(ShapeController.getSwingColour(bc));
+		triangle.setFillColor(ShapeController.getSwingColour(fc));
 		drawingPane.getChildren().remove(drawingTriangle);
 		drawer.addShape(triangle, drawingPane);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, triangle);
@@ -274,12 +317,14 @@ public class Controller {
 		if (firstClick == null) {// Didn't have first click yet.
 			firstClick = new Point2D(me.getX(), me.getY());
 			drawingLine = new Line(me.getX(), me.getY(), me.getX(), me.getY());
+			colorShape(drawingLine);
 			drawingPane.getChildren().add(drawingLine);
-
 			if (drawingNow.equals("line")) {
 				feedback.setText("Set the ending point of the line.");
 			} else if (drawingNow.equals("circle")) {
-				drawingCircle = new javafx.scene.shape.Circle(firstClick.getX(), firstClick.getY(), drawingLineLength);
+				drawingCircle = new javafx.scene.shape.Circle(
+						firstClick.getX(), firstClick.getY(), drawingLineLength);
+				colorShape(drawingCircle);
 				drawingPane.getChildren().add(drawingCircle);
 				feedback.setText("Set the circle's radius.");
 			} else if (drawingNow.equals("rec")) {
@@ -289,10 +334,11 @@ public class Controller {
 			} else if (drawingNow.equals("square")) {
 				drawingRec = new Rectangle(firstClick.getX(), firstClick.getY(),
 						Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+				colorShape(drawingRec);
 				drawingPane.getChildren().add(drawingRec);
 				feedback.setText("Set the square's lower right corner.");
 			} else if (drawingNow.equals("triangle")) {
-				feedback.setText("Set the second corner of triangle.");
+				feedback.setText("Set the triangle's second vertex.");
 
 			}
 		} else if (secondClick == null) {// Clicked once before.
@@ -305,12 +351,14 @@ public class Controller {
 				secondClick = new Point2D(me.getX(), firstClick.getY());
 				drawingRec = new Rectangle(firstClick.getX(), firstClick.getY(),
 						Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+				colorShape(drawingRec);
 				drawingPane.getChildren().add(drawingRec);
 				feedback.setText("Set the rectangle's lower-right corner.");
 			} else if (drawingNow.equals("ellipse")) {
 				secondClick = new Point2D(me.getX(), firstClick.getY());
 				drawingEllipse = new javafx.scene.shape.Ellipse(firstClick.getX(), firstClick.getY(),
 						Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+				colorShape(drawingEllipse);
 				drawingPane.getChildren().add(drawingEllipse);
 				feedback.setText("Set the ellipse's height.");
 			} else if (drawingNow.equals("square")) {
@@ -319,9 +367,10 @@ public class Controller {
 				drawingTriangle = new Polygon();
 				drawingTriangle.getPoints().addAll(new Double[] { firstClick.getX(), firstClick.getY(),
 						secondClick.getX(), secondClick.getY(), me.getX(), me.getY() });
+				colorShape(drawingTriangle);
 				drawingPane.getChildren().remove(drawingLine);
 				drawingPane.getChildren().add(drawingTriangle);
-				feedback.setText("Set the triangle's third corner.");
+				feedback.setText("Set the triangle's third vertex.");
 
 			}
 		} else if (thirdClick == null) {// Clicked twice before.
