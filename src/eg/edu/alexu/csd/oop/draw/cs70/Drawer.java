@@ -25,12 +25,27 @@ import eg.edu.alexu.csd.oop.draw.Stroke;
 import javafx.scene.layout.Pane;
 
 public class Drawer implements DrawingEngine {
+	/**
+	 * Maximum size of saved commands.
+	 */
 	private static final int MAX_SIZE = 20;
 
-	private ArrayList<Shape> shapes = new ArrayList<Shape>();
+	/**
+	 * List of shapes.
+	 */
+	private ArrayList<Shape> shapes = new ArrayList<>();
 
-	private ArrayList<ICommand> actionsPerformed = new ArrayList<>();
-	private ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
+	/**
+	 * List of actions performed for undo.
+	 */
+	private final ArrayList<ICommand> actionsPerformed =
+			new ArrayList<>();
+	/**
+	 * List of actions UNPerformed for redo.
+	 */
+	private final ArrayList<ICommand> actionsUNPerformed =
+			new ArrayList<>();
+
 
 	@Override
 	public void refresh(final Graphics canvas) {

@@ -4,7 +4,13 @@ import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
 
 public class RemoveCommand implements ICommand {
+	/**
+	 * Shape that receives the command.
+	 */
 	private Shape receiver;
+	/**
+	 * Command's type.
+	 */
 	public static final String COMMAND_TYPE = "remove";
 
 	public RemoveCommand(Shape receiver) {
@@ -24,9 +30,7 @@ public class RemoveCommand implements ICommand {
 
 	}
 
-	/**
-	 * @return the receiver
-	 */
+	@Override
 	public Shape getReceiver(String receiver) {
 		return this.receiver;
 	}
