@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -53,7 +54,8 @@ public class Controller {
 	private JFXButton save;
 	@FXML
 	private JFXButton load;
-
+	@FXML
+	private TextField path;
 	@FXML
 	Label feedback;
 	@FXML
@@ -111,6 +113,21 @@ public class Controller {
 		bcPicker.setDisable(set);
 		save.setDisable(set);
 		load.setDisable(set);
+	}
+
+	@FXML
+	private void saveState(ActionEvent e) {
+		drawer.save(path.getText());
+	}
+
+	@FXML
+	private void loadState(ActionEvent e) {
+		drawer.save(path.getText());
+		shapeControllerList = new ArrayList<>();
+		for (eg.edu.alexu.csd.oop.draw.Shape sh : drawer.getShapes()) {
+			ShapeController controller = new ShapeController(drawingPane, drawer, sh);
+			shapeControllerList.add(controller);
+		}
 	}
 
 	@FXML
@@ -479,6 +496,35 @@ public class Controller {
 			drawingPane.getChildren().remove(drawingRec);
 			finishDrawing();
 			expectAction(true);
+		}
+	}
+
+	@FXML
+	private void moveAction(ActionEvent e) {
+		if (expectingAction) {
+			//TODO: Auto generated H Stub.
+			expectAction(false);
+		}
+	}
+
+	@FXML
+	private void copyAction(ActionEvent e) {
+		if (expectingAction) {
+			//TODO: Auto generated H Stub.
+			expectAction(false);
+		}
+	}
+
+	@FXML
+	private void removeAction(ActionEvent e) {
+		if (expectingAction) {
+			for (ShapeController sc : shapeControllerList) {
+				if (sc.isSelected()) {
+					drawingPane.getChildren().remove(sc.getFx());
+					drawer.removeShape(sc.shape, drawingPane);
+				}
+			}
+			expectAction(false);
 		}
 	}
 
