@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import com.jfoenix.controls.JFXButton;
@@ -46,6 +47,12 @@ public class Controller {
 	private ColorPicker fcPicker;
 	@FXML
 	private ColorPicker bcPicker;
+	@FXML
+	private JFXButton applyColours;
+	@FXML
+	private JFXButton save;
+	@FXML
+	private JFXButton load;
 
 	@FXML
 	Label feedback;
@@ -63,6 +70,7 @@ public class Controller {
 	private Color fc;
 	private Color bc;
 	private String drawingNow;
+	private boolean expectingAction;
 
 	/**
 	 * The drawing engine.
@@ -79,7 +87,19 @@ public class Controller {
 		bc = bcPicker.getValue();
 	}
 
-	private void setDrawingButtonsDisabled(boolean set) {
+	private final void setWidthInRange(MouseEvent me) {
+		if (me.getX() >= firstClick.getX()) {
+			drawingRec.setWidth(me.getX() - firstClick.getX());
+		}
+	}
+
+	private final void setHeightInRange(MouseEvent me) {
+		if (me.getY() >= firstClick.getY()) {
+			drawingRec.setHeight(me.getY() - firstClick.getY());
+		}
+	}
+
+	private void paneInteraction(boolean set) {
 		lineMaker.setDisable(set);
 		circleMaker.setDisable(set);
 		recMaker.setDisable(set);
@@ -87,6 +107,39 @@ public class Controller {
 		triangleMaker.setDisable(set);
 		ellipseMaker.setDisable(set);
 		pluginMaker.setDisable(set);
+		fcPicker.setDisable(set);
+		bcPicker.setDisable(set);
+		save.setDisable(set);
+		load.setDisable(set);
+	}
+
+	@FXML
+	private void colourize (ActionEvent a) {
+		if (expectingAction) {
+			readColours();
+			for (ShapeController sc : shapeControllerList) {
+				if (sc.isSelected()) {
+					this.colorShape(sc.getFx());
+					sc.shape.setColor(ShapeController.getSwingColour(bc));
+					sc.shape.setFillColor(ShapeController.getSwingColour(fc));
+				}
+			}
+			expectAction(false);
+		}
+	}
+
+	private void expectAction(boolean set) {
+		expectingAction = set;
+		if (!set) {//Deselect all.
+			for (final ShapeController sc : shapeControllerList) {
+				sc.setSelected(false);
+			}
+		}
+		set = !set;
+		remove.setDisable(set);
+		move.setDisable(set);
+		copy.setDisable(set);
+		applyColours.setDisable(set);
 		fcPicker.setDisable(set);
 		bcPicker.setDisable(set);
 	}
@@ -104,7 +157,7 @@ public class Controller {
 	private void makeLine(final ActionEvent e) {
 		readColours();
 		drawingNow = "line";
-		setDrawingButtonsDisabled(true);
+		paneInteraction(true);
 		feedback.setText("Set the starting point of the line.");
 	}
 
@@ -112,7 +165,7 @@ public class Controller {
 	private void makeCircle(final ActionEvent e) {
 		readColours();
 		drawingNow = "circle";
-		setDrawingButtonsDisabled(true);
+		paneInteraction(true);
 		feedback.setText("Set the circle's center.");
 	}
 
@@ -120,7 +173,7 @@ public class Controller {
 	private void makeRec(final ActionEvent e) {
 		readColours();
 		drawingNow = "rec";
-		setDrawingButtonsDisabled(true);
+		paneInteraction(true);
 		feedback.setText("Set the rectangle's upper-left corner.");
 	}
 
@@ -128,7 +181,7 @@ public class Controller {
 	private void makeSquare(final ActionEvent e) {
 		readColours();
 		drawingNow = "square";
-		setDrawingButtonsDisabled(true);
+		paneInteraction(true);
 		feedback.setText("Set the square's upper-left corner.");
 
 	}
@@ -137,7 +190,7 @@ public class Controller {
 	private void makeTriangle(final ActionEvent e) {
 		readColours();
 		drawingNow = "triangle";
-		setDrawingButtonsDisabled(true);
+		paneInteraction(true);
 		feedback.setText("Set the triangle's first vertex.");
 	}
 
@@ -145,15 +198,15 @@ public class Controller {
 	private void makeEllipse(final ActionEvent e) {
 		readColours();
 		drawingNow = "ellipse";
-		setDrawingButtonsDisabled(true);
+		paneInteraction(true);
 		feedback.setText("Set the ellipse's center.");
 	}
 
 	@FXML
 	private void makePlugin(final ActionEvent e) {
 		readColours();
-		drawingNow = "plugin";
-		setDrawingButtonsDisabled(true);
+		drawingNow = "plugin"; //TODO
+		paneInteraction(true);
 	}
 
 	private void drawLine() {
@@ -256,7 +309,7 @@ public class Controller {
 		drawingEllipse = null;
 		drawingCircle = null;
 		drawingTriangle = null;
-		setDrawingButtonsDisabled(false);
+		paneInteraction(false);
 		feedback.setText("");
 	}
 
@@ -273,17 +326,16 @@ public class Controller {
 
 			else if (drawingNow.equals("rec")) {
 				if (drawingRec != null) {
-					drawingRec.setHeight(Math.abs(me.getY() - firstClick.getY()));
+					setHeightInRange(me);
 				} else {
 					if (me.getX() >= firstClick.getX()) {
 						drawingLine.setEndX(me.getX());
 					}
-
 				}
 			} else if (drawingNow.equals("square")) {
 				if (drawingRec != null) {
-					drawingRec.setHeight(Math.abs(me.getY() - firstClick.getY()));
-					drawingRec.setWidth(Math.abs(me.getY() - firstClick.getY()));
+					setWidthInRange(me);
+					setHeightInRange(me);
 
 				}
 			} else if (drawingNow.equals("ellipse")) {
@@ -311,7 +363,7 @@ public class Controller {
 
 	@FXML
 	private void paneClick(MouseEvent me) {
-		if (drawingNow == null) {
+		if (drawingNow == null || drawingNow.equals("selecting")) {
 			return;
 		}
 		if (firstClick == null) {// Didn't have first click yet.
@@ -339,7 +391,6 @@ public class Controller {
 				feedback.setText("Set the square's lower right corner.");
 			} else if (drawingNow.equals("triangle")) {
 				feedback.setText("Set the triangle's second vertex.");
-
 			}
 		} else if (secondClick == null) {// Clicked once before.
 			secondClick = new Point2D(me.getX(), me.getY());
@@ -371,7 +422,6 @@ public class Controller {
 				drawingPane.getChildren().remove(drawingLine);
 				drawingPane.getChildren().add(drawingTriangle);
 				feedback.setText("Set the triangle's third vertex.");
-
 			}
 		} else if (thirdClick == null) {// Clicked twice before.
 			thirdClick = new Point2D(me.getX(), me.getY());
@@ -382,7 +432,53 @@ public class Controller {
 			} else if (drawingNow.equals("triangle")) {
 				drawTriangle();
 			}
+		}
+	}
 
+	@FXML
+	private void startSelect(MouseEvent me) {
+		if (drawingNow != null && drawingNow.equals("selecting")) {
+			firstClick = new Point2D(me.getX(), me.getY());
+			feedback.setText("Drag to select items by center.");
+			drawingRec = new Rectangle(firstClick.getX(), firstClick.getY(),
+					Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+			drawingRec.setFill(Color.TRANSPARENT);
+			drawingRec.setStroke(Color.LIGHTBLUE);
+			drawingPane.getChildren().add(drawingRec);
+		}
+	}
+
+	@FXML
+	private void initiateSelect(ActionEvent e) {
+		paneInteraction(true);
+		feedback.setText("Start dragging by top left corner for selection.");
+		drawingNow = "selecting";
+	}
+
+	@FXML
+	private void selecting(MouseEvent me) {
+		if (drawingNow != null && drawingNow.equals("selecting")) {
+			if (drawingRec != null) {
+				setWidthInRange(me);
+				setHeightInRange(me);
+			}
+		}
+	}
+
+	@FXML
+	private void finishSelect(MouseEvent me) {
+		if (drawingNow != null && drawingNow.equals("selecting")) {
+			for (ShapeController sc : shapeControllerList) {
+				Point position = sc.shape.getPosition();
+				final double x = position.getX();
+				final double y = position.getY();
+				if (drawingRec.intersects(x, y, 0, 0)) {
+					sc.setSelected(true);
+				}
+			}
+			drawingPane.getChildren().remove(drawingRec);
+			finishDrawing();
+			expectAction(true);
 		}
 	}
 
