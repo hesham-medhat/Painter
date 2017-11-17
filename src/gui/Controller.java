@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import com.jfoenix.controls.JFXButton;
 
-import eg.edu.alexu.csd.oop.draw.Stroke;
 import eg.edu.alexu.csd.oop.draw.cs70.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -73,7 +72,7 @@ public class Controller {
 	private Color fc;
 	private Color bc;
 	private String drawingNow;
-	private boolean expectingAction = true;
+	private boolean expectingAction;
 
 	/**
 	 * The drawing engine.
@@ -336,30 +335,13 @@ public class Controller {
 
 	@FXML
 	private void moveDrawer(final MouseEvent me) {
-		if (firstClick == null ) {
-			if (drawingNow.equals("move")) {
+		if (firstClick == null) {
+			if (drawingNow != null && drawingNow.equals("move")) {
 				for (ShapeController sc : selectedShapes) {
 					sc.getFx().relocate(me.getX(), me.getY());
-
-				}
-			} else if (drawingNow.equals("copy")) {
-				for (ShapeController sc : selectedShapes) {
-					try {
-						javafx.scene.shape.Shape newFxShape = sc.getFx().getClass().newInstance();
-						drawingPane.getChildren().add(newFxShape);
-						newFxShape.relocate(me.getX(), me.getY());
-
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 				}
 			}
-		} else if (firstClick != null) {
+		} else {
 			if (drawingNow.equals("circle")) {
 				drawingLine.setEndX(me.getX());
 				drawingLine.setEndY(me.getY());
@@ -444,7 +426,13 @@ public class Controller {
 			}
 		} else if (secondClick == null) {// Clicked once before.
 			secondClick = new Point2D(me.getX(), me.getY());
-			if (drawingNow.equals("line")) {
+			if (drawingNow.equals("copy")) {
+				for (ShapeController sc : selectedShapes) {
+					ShapeController newSC = sc.copy();
+					shapeControllerList.add(newSC);
+					newSC.getFx().relocate(me.getX(), me.getY());
+				}
+			} else if (drawingNow.equals("line")) {
 				drawLine();
 			} else if (drawingNow.equals("circle")) {
 				drawCircle();
@@ -538,9 +526,7 @@ public class Controller {
 			findSelected();
 			drawingNow = "move";
 		}
-		selectedShapes.clear();
 		expectAction(false);
-
 	}
 
 	@FXML
@@ -549,7 +535,6 @@ public class Controller {
 			findSelected();
 			drawingNow = "copy";
 		}
-		selectedShapes.clear();
 		expectAction(false);
 	}
 

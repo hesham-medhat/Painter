@@ -273,6 +273,8 @@ public abstract class Stroke implements Shape {
 		return propMap;
 	}
 
+	public abstract javafx.scene.shape.Shape makeFx();
+
 	public String toString() {
 		return this.getClass().getName();
 	}

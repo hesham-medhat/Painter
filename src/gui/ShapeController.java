@@ -35,21 +35,16 @@ public class ShapeController {
 		shape = newShape;
 	}
 
-	protected void copy(Point2D position) {
+	protected ShapeController copy() {
 		Shape newShape = null;
 		try {
 			newShape = (Shape) shape.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		try {
-			javafx.scene.shape.Shape newFxShape = ((Stroke) newShape).getFxShape().getClass().newInstance();
-			((Stroke) newShape).setFxShape(newFxShape);
-		} catch (InstantiationException | IllegalAccessException e) {
-			System.err.println("Couldn't instantiate another fxShape");
-			e.printStackTrace();
-		}
+		((Stroke) newShape).setFxShape(((Stroke) shape).makeFx());
 		drawer.addShape(newShape, drawingPane);
+		return new ShapeController(drawingPane, drawer, newShape);
 	}
 
 	/**
