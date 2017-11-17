@@ -61,6 +61,19 @@ public class ShapeController {
 	}
 
 	/**
+	 * Returns the javafx color equivalent of the fxColour.
+	 * 
+	 * @param swingColour
+	 *            
+	 * @return Color fx equivalent.
+	 */
+	public static Color getFxColour(java.awt.Color swingColour) {
+		Color color = new Color((double) swingColour.getRed(), (double) swingColour.getGreen(),
+				(double) swingColour.getBlue(), 1);
+		return color;
+	}
+
+	/**
 	 * @return the selected
 	 */
 	public boolean isSelected() {
