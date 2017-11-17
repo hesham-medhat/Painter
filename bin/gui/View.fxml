@@ -48,7 +48,8 @@
       <Label layoutX="133.0" layoutY="589.0" text="Fill Colour:" textFill="#2900ff" />
       <Label layoutX="341.0" layoutY="589.0" text="Border Colour:" textFill="#2b00ff" />
       <JFXButton fx:id="applyColours" layoutX="618.0" layoutY="585.0" onAction="#colourize" prefHeight="25.0" prefWidth="96.0" text="Apply Colours" />
-      <TextField fx:id="path" layoutX="568.0" layoutY="24.0" prefHeight="25.0" prefWidth="146.0" promptText="Save/Load file path" />
+      <TextField fx:id="path" layoutX="568.0" layoutY="24.0" prefHeight="25.0" prefWidth="146.0" promptText="Save/Load/Plugin path" />
       <Separator layoutX="375.0" layoutY="19.0" orientation="VERTICAL" prefHeight="61.0" prefWidth="6.0" />
+      <Separator layoutX="11.0" layoutY="467.0" prefHeight="9.0" prefWidth="107.0" />
    </children>
 </AnchorPane>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import com.jfoenix.controls.JFXButton;
 
+import eg.edu.alexu.csd.oop.draw.Stroke;
 import eg.edu.alexu.csd.oop.draw.cs70.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -72,13 +73,14 @@ public class Controller {
 	private Color fc;
 	private Color bc;
 	private String drawingNow;
-	private boolean expectingAction;
+	private boolean expectingAction = true;
 
 	/**
 	 * The drawing engine.
 	 */
 	private Drawer drawer;
 	private ArrayList<ShapeController> shapeControllerList = new ArrayList<>();
+	private ArrayList<ShapeController> selectedShapes = new ArrayList<>();
 
 	public Controller() {
 		drawer = new Drawer();
@@ -131,7 +133,7 @@ public class Controller {
 	}
 
 	@FXML
-	private void colourize (ActionEvent a) {
+	private void colourize(ActionEvent a) {
 		if (expectingAction) {
 			readColours();
 			for (ShapeController sc : shapeControllerList) {
@@ -147,7 +149,7 @@ public class Controller {
 
 	private void expectAction(boolean set) {
 		expectingAction = set;
-		if (!set) {//Deselect all.
+		if (!set) {// Deselect all.
 			for (final ShapeController sc : shapeControllerList) {
 				sc.setSelected(false);
 			}
@@ -163,7 +165,9 @@ public class Controller {
 
 	/**
 	 * Colors the given fxShape.
-	 * @param visual fxShape.
+	 * 
+	 * @param visual
+	 *            fxShape.
 	 */
 	private void colorShape(Shape visual) {
 		visual.setFill(fc);
@@ -222,7 +226,7 @@ public class Controller {
 	@FXML
 	private void makePlugin(final ActionEvent e) {
 		readColours();
-		drawingNow = "plugin"; //TODO
+		drawingNow = "plugin"; // TODO
 		paneInteraction(true);
 	}
 
@@ -332,7 +336,30 @@ public class Controller {
 
 	@FXML
 	private void moveDrawer(final MouseEvent me) {
-		if (firstClick != null) {
+		if (firstClick == null ) {
+			if (drawingNow.equals("move")) {
+				for (ShapeController sc : selectedShapes) {
+					sc.getFx().relocate(me.getX(), me.getY());
+
+				}
+			} else if (drawingNow.equals("copy")) {
+				for (ShapeController sc : selectedShapes) {
+					try {
+						javafx.scene.shape.Shape newFxShape = sc.getFx().getClass().newInstance();
+						drawingPane.getChildren().add(newFxShape);
+						newFxShape.relocate(me.getX(), me.getY());
+
+					} catch (InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			}
+		} else if (firstClick != null) {
 			if (drawingNow.equals("circle")) {
 				drawingLine.setEndX(me.getX());
 				drawingLine.setEndY(me.getY());
@@ -391,8 +418,7 @@ public class Controller {
 			if (drawingNow.equals("line")) {
 				feedback.setText("Set the ending point of the line.");
 			} else if (drawingNow.equals("circle")) {
-				drawingCircle = new javafx.scene.shape.Circle(
-						firstClick.getX(), firstClick.getY(), drawingLineLength);
+				drawingCircle = new javafx.scene.shape.Circle(firstClick.getX(), firstClick.getY(), drawingLineLength);
 				colorShape(drawingCircle);
 				drawingPane.getChildren().add(drawingCircle);
 				feedback.setText("Set the circle's radius.");
@@ -408,6 +434,13 @@ public class Controller {
 				feedback.setText("Set the square's lower right corner.");
 			} else if (drawingNow.equals("triangle")) {
 				feedback.setText("Set the triangle's second vertex.");
+			} else if (drawingNow.equals("move")) {
+				for (ShapeController sc : selectedShapes) {
+					sc.getFx().relocate(me.getX(), me.getY());
+					Point2D newPosition = new Point2D(me.getX(), me.getY());
+					sc.move(newPosition);
+					finishDrawing();
+				}
 			}
 		} else if (secondClick == null) {// Clicked once before.
 			secondClick = new Point2D(me.getX(), me.getY());
@@ -457,8 +490,8 @@ public class Controller {
 		if (drawingNow != null && drawingNow.equals("selecting")) {
 			firstClick = new Point2D(me.getX(), me.getY());
 			feedback.setText("Drag to select items by center.");
-			drawingRec = new Rectangle(firstClick.getX(), firstClick.getY(),
-					Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+			drawingRec = new Rectangle(firstClick.getX(), firstClick.getY(), Math.abs(firstClick.getX() - me.getX()),
+					Math.abs(me.getY() - firstClick.getY()));
 			drawingRec.setFill(Color.TRANSPARENT);
 			drawingRec.setStroke(Color.LIGHTBLUE);
 			drawingPane.getChildren().add(drawingRec);
@@ -502,29 +535,43 @@ public class Controller {
 	@FXML
 	private void moveAction(ActionEvent e) {
 		if (expectingAction) {
-			//TODO: Auto generated H Stub.
-			expectAction(false);
+			findSelected();
+			drawingNow = "move";
 		}
+		selectedShapes.clear();
+		expectAction(false);
+
 	}
 
 	@FXML
 	private void copyAction(ActionEvent e) {
 		if (expectingAction) {
-			//TODO: Auto generated H Stub.
-			expectAction(false);
+			findSelected();
+			drawingNow = "copy";
 		}
+		selectedShapes.clear();
+		expectAction(false);
 	}
 
 	@FXML
 	private void removeAction(ActionEvent e) {
 		if (expectingAction) {
-			for (ShapeController sc : shapeControllerList) {
-				if (sc.isSelected()) {
-					drawingPane.getChildren().remove(sc.getFx());
-					drawer.removeShape(sc.shape, drawingPane);
-				}
+			findSelected();
+			for (ShapeController sc : selectedShapes) {
+				drawingPane.getChildren().remove(sc.getFx());
+				drawer.removeShape(sc.shape, drawingPane);
+				sc.setSelected(false);
 			}
+			selectedShapes.clear();
 			expectAction(false);
+		}
+	}
+
+	private void findSelected() {
+		for (ShapeController sc : shapeControllerList) {
+			if (sc.isSelected()) {
+				selectedShapes.add(sc);
+			}
 		}
 	}
 
