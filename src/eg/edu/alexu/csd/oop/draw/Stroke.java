@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.json.*;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,14 +21,15 @@ import eg.edu.alexu.csd.oop.draw.Shape;
 import javafx.scene.layout.Pane;
 
 /**
- * Class of all shapes containing common
- * characteristics and helper method for the
- * cloning process.
+ * Class of all shapes containing common characteristics and helper method for
+ * the cloning process.
  * 
  * @author H
  *
  */
 public abstract class Stroke implements Shape {
+
+	private static final int RGB_COUNT = 3;
 
 	/**
 	 * JavaFx shape.
@@ -41,7 +44,8 @@ public abstract class Stroke implements Shape {
 	}
 
 	/**
-	 * @param fxShape the fxShape to set
+	 * @param fxShape
+	 *            the fxShape to set
 	 */
 	public void setFxShape(javafx.scene.shape.Shape fxShape) {
 		this.fxShape = fxShape;
@@ -68,8 +72,7 @@ public abstract class Stroke implements Shape {
 	protected Color fill;
 
 	/**
-	 * Map containing the properties of the shape.
-	 * String keys to Double values.
+	 * Map containing the properties of the shape. String keys to Double values.
 	 */
 	protected Map<String, Double> prop;
 
@@ -87,11 +90,9 @@ public abstract class Stroke implements Shape {
 	@Override
 	public void setPosition(final Point position) {
 		if (position != null) {
-			center = new Point((int) position.getX(),
-					(int) position.getY());
+			center = new Point((int) position.getX(), (int) position.getY());
 		} else {
-			throw new
-			IllegalArgumentException("Got null position!");
+			throw new IllegalArgumentException("Got null position!");
 		}
 	}
 
@@ -105,8 +106,7 @@ public abstract class Stroke implements Shape {
 		if (color != null) {
 			this.color = color;
 		} else {
-			throw new
-			IllegalArgumentException("Got null border color!");
+			throw new IllegalArgumentException("Got null border color!");
 		}
 	}
 
@@ -120,8 +120,7 @@ public abstract class Stroke implements Shape {
 		if (color != null) {
 			this.fill = color;
 		} else {
-			throw new
-			IllegalArgumentException("Got null filler color!");
+			throw new IllegalArgumentException("Got null filler color!");
 		}
 	}
 
@@ -131,8 +130,7 @@ public abstract class Stroke implements Shape {
 	}
 
 	@Override
-	public void setProperties(final Map<String, Double>
-	properties) {
+	public void setProperties(final Map<String, Double> properties) {
 		prop = properties;
 	}
 
@@ -147,17 +145,18 @@ public abstract class Stroke implements Shape {
 	}
 
 	/**
-	 * Clones fields in Stroke except prop.
-	 * It is encouraged to use it when cloning any subclass
-	 * as this should be common code while cloning.
-	 * Only remaining step for cloning would be getting specific
-	 * properties of the specific subclass to be cloned.
+	 * Clones fields in Stroke except prop. It is encouraged to use it when
+	 * cloning any subclass as this should be common code while cloning. Only
+	 * remaining step for cloning would be getting specific properties of the
+	 * specific subclass to be cloned.
 	 * 
-	 * Ideally used as helper function in clone() overridden
-	 * method from Object for Shapes.
+	 * Ideally used as helper function in clone() overridden method from Object
+	 * for Shapes.
 	 * 
-	 * @param newShape to become a clone. 
-	 * @param other to be cloned.
+	 * @param newShape
+	 *            to become a clone.
+	 * @param other
+	 *            to be cloned.
 	 */
 	public void cloneBasic(Shape newShape, final Shape other) {
 		newShape.setColor(other.getColor());
@@ -165,30 +164,7 @@ public abstract class Stroke implements Shape {
 		newShape.setPosition(other.getPosition());
 	}
 
-	public abstract Object clone()
-			throws CloneNotSupportedException;
-
-//	public JsonArray buildJsonArray() {
-//		JsonArrayBuilder jBasicB = Json.createArrayBuilder();
-//		jBasicB.add(this.toString());
-//		float[] colorArr = new float[3];
-//		colorArr = color.getRGBColorComponents(colorArr);
-//		float[] fillArr = new float[3];
-//		fillArr = color.getRGBColorComponents(fillArr);
-//		JsonArrayBuilder colorArrB = Json.createArrayBuilder();
-//		JsonArrayBuilder fillArrB = Json.createArrayBuilder();
-//		for (int i = 0; i < 3; i++) {
-//			colorArrB.add((double) colorArr[i]);
-//			fillArrB.add((double) fillArr[i]);
-//		}
-//		jBasicB.add(colorArrB);
-//		jBasicB.add(fillArrB);
-//		jBasicB.add(center.getX());
-//		jBasicB.add(center.getY());
-//		jBasicB.add(strokeWidth);		
-//		jBasicB.add(prop.toString());
-//		return jBasicB.build();
-//	}
+	public abstract Object clone() throws CloneNotSupportedException;
 
 	public Node buildXMLElement(Document dom) {
 		Node root = dom.createTextNode(this.toString());
@@ -196,7 +172,7 @@ public abstract class Stroke implements Shape {
 		colorArr = color.getRGBColorComponents(colorArr);
 		float[] fillArr = new float[3];
 		fillArr = color.getRGBColorComponents(fillArr);
-		Element colorArrB = dom.createElement("colorArr"); 
+		Element colorArrB = dom.createElement("colorArr");
 		Element fillArrB = dom.createElement("fillArr");
 		for (int i = 0; i < 3; i++) {
 			colorArrB.appendChild(dom.createTextNode(((Float) colorArr[i]).toString()));
@@ -254,7 +230,7 @@ public abstract class Stroke implements Shape {
 			sh.setPosition(position);
 			return sh;
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			e.printStackTrace();//Class not found.
+			e.printStackTrace();// Class not found.
 			return null;
 		}
 	}
@@ -265,15 +241,37 @@ public abstract class Stroke implements Shape {
 			props.load(new StringReader(str.substring(1, str.length() - 1).replace(", ", "\n")));
 		} catch (IOException e1) {
 			e1.printStackTrace();
-		}       
+		}
 		HashMap<String, Double> propMap = new HashMap<String, Double>();
 		for (Map.Entry<Object, Object> e : props.entrySet()) {
-		    propMap.put((String)e.getKey(), Double.parseDouble((String)e.getValue()));
+			propMap.put((String) e.getKey(), Double.parseDouble((String) e.getValue()));
 		}
 		return propMap;
 	}
 
 	public abstract javafx.scene.shape.Shape makeFx();
+
+	public JsonArray buildJsonArray() {
+		JsonArrayBuilder jBasicB = Json.createArrayBuilder();
+		jBasicB.add(this.toString());
+		float[] colorArr = new float[RGB_COUNT];
+		colorArr = color.getRGBColorComponents(colorArr);
+		float[] fillArr = new float[RGB_COUNT];
+		fillArr = color.getRGBColorComponents(fillArr);
+		JsonArrayBuilder colorArrB = Json.createArrayBuilder();
+		JsonArrayBuilder fillArrB = Json.createArrayBuilder();
+		for (int i = 0; i < RGB_COUNT; i++) {
+			colorArrB.add((double) colorArr[i]);
+			fillArrB.add((double) fillArr[i]);
+		}
+		jBasicB.add(colorArrB);
+		jBasicB.add(fillArrB);
+		jBasicB.add(center.getX());
+		jBasicB.add(center.getY());
+		jBasicB.add(strokeWidth);
+		jBasicB.add(prop.toString());
+		return jBasicB.build();
+	}
 
 	public String toString() {
 		return this.getClass().getName();
