@@ -4,7 +4,7 @@ import javafx.scene.layout.Pane;
 
 public interface DrawingEngine {
 	/* redraw all shapes on the canvas */
-	public void refresh(java.awt.Graphics canvas);
+	public void refresh(Pane canvas);
 
 	public void addShape(Shape shape, Pane drawingPane);
 

@@ -7,7 +7,6 @@ import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 public class ShapeController {
 
@@ -22,55 +21,37 @@ public class ShapeController {
 		drawingPane = drawingPaneIn;
 	}
 
-	protected void move(Point2D newCenter) {
+	protected void move(Point2D clickDifference) {
 		Shape newShape = null;
 		try {
 			newShape = (Shape) shape.clone();
+			((Stroke) newShape).setFxShape(this.getFx());
+			Point oldPosition = shape.getPosition();
+			Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()), (int) (clickDifference.getY() + oldPosition.getY()));
+			newShape.setPosition(newPosition);
+			this.getFx().relocate(newPosition.getX(), newPosition.getY());
+			drawer.updateShape(shape, newShape, drawingPane);
+			shape = newShape;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		((Stroke) newShape).setFxShape(((Stroke) shape).getFxShape());
-		newShape.setPosition(new Point((int) newCenter.getX(), (int) newCenter.getY()));
-		drawer.updateShape(shape, newShape, drawingPane);
-		shape = newShape;
 	}
 
-	protected ShapeController copy() {
+	protected ShapeController copy(Point2D clickDifference) {
 		Shape newShape = null;
 		try {
 			newShape = (Shape) shape.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
-		((Stroke) newShape).setFxShape(((Stroke) shape).makeFx());
+		javafx.scene.shape.Shape newFx = ((Stroke) shape).makeFx();
+		Point oldPosition = shape.getPosition();
+		Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()), (int) (clickDifference.getY() + oldPosition.getY()));
+		newFx.relocate(newPosition.getX(), newPosition.getY());
+		newShape.setPosition(newPosition);
+		((Stroke) newShape).setFxShape(newFx);
 		drawer.addShape(newShape, drawingPane);
 		return new ShapeController(drawingPane, drawer, newShape);
-	}
-
-	/**
-	 * Returns the RGB awt color equivalent of the fxColour.
-	 * 
-	 * @param fxColour
-	 *            as paint.
-	 * @return java.awt.Color equivalent.
-	 */
-	public static java.awt.Color getSwingColour(Color fxColour) {
-		java.awt.Color color = new java.awt.Color((int) fxColour.getRed(), (int) fxColour.getGreen(),
-				(int) fxColour.getBlue());
-		return color;
-	}
-
-	/**
-	 * Returns the javafx color equivalent of the fxColour.
-	 * 
-	 * @param swingColour
-	 *            
-	 * @return Color fx equivalent.
-	 */
-	public static Color getFxColour(java.awt.Color swingColour) {
-		Color color = new Color((double) swingColour.getRed(), (double) swingColour.getGreen(),
-				(double) swingColour.getBlue(), 1);
-		return color;
 	}
 
 	/**

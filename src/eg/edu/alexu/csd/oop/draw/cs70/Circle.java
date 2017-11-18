@@ -4,7 +4,7 @@ import java.awt.Point;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
-import gui.ShapeController;
+import gui.ColourAdapter;
 
 /**
  * Holds data for circle representation.
@@ -63,8 +63,8 @@ public class Circle extends Stroke {
 	@Override
 	public javafx.scene.shape.Shape makeFx() {
 		javafx.scene.shape.Circle fxCircle = new javafx.scene.shape.Circle(center.getX(), center.getY(), prop.get("radius"));
-		fxCircle.setFill(ShapeController.getFxColour(fill));
-		fxCircle.setStroke(ShapeController.getFxColour(color));
+		fxCircle.setFill(ColourAdapter.getFxColour(fill));
+		fxCircle.setStroke(ColourAdapter.getFxColour(color));
 		return fxCircle;
 	}
 

@@ -1,6 +1,5 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
-import java.awt.Graphics;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -53,13 +52,20 @@ public class Drawer implements DrawingEngine {
 	 */
 	private final ArrayList<ICommand> actionsUNPerformed =
 			new ArrayList<>();
+	/**
+	 * Keeps track of whether this drawing engine has found a plugin.
+	 */
 	private boolean pluginFound = false;
+	/**
+	 * Plugin shape found. Or null if hasn't been found yet.
+	 */
 	private Class<? extends Shape> pluginShape;
 
-
 	@Override
-	public void refresh(final Graphics canvas) {
-
+	public void refresh(Pane canvas) {
+		for (Shape sh : shapes) {
+			sh.draw(canvas);
+		}
 	}
 
 	@Override
