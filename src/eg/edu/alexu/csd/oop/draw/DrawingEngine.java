@@ -33,7 +33,7 @@ public interface DrawingEngine {
 	 * use the file extension to determine the type, or throw runtime exception
 	 * when unexpected extension
 	 */
-	public void save(String path);
+	public void save(String path) throws Exception;
 
-	public void load(String path);
+	public void load(String path) throws Exception;
 }

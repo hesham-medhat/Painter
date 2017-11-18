@@ -254,23 +254,48 @@ public abstract class Stroke implements Shape {
 	public JsonArray buildJsonArray() {
 		JsonArrayBuilder jBasicB = Json.createArrayBuilder();
 		jBasicB.add(this.toString());
-		float[] colorArr = new float[RGB_COUNT];
+		float[] colorArr = new float[RGB_COUNT];//
 		colorArr = color.getRGBColorComponents(colorArr);
 		float[] fillArr = new float[RGB_COUNT];
 		fillArr = color.getRGBColorComponents(fillArr);
 		JsonArrayBuilder colorArrB = Json.createArrayBuilder();
 		JsonArrayBuilder fillArrB = Json.createArrayBuilder();
 		for (int i = 0; i < RGB_COUNT; i++) {
-			colorArrB.add((double) colorArr[i]);
-			fillArrB.add((double) fillArr[i]);
+			colorArrB.add(colorArr[i]);
+			fillArrB.add(fillArr[i]);
 		}
 		jBasicB.add(colorArrB);
 		jBasicB.add(fillArrB);
 		jBasicB.add(center.getX());
 		jBasicB.add(center.getY());
-		jBasicB.add(strokeWidth);
 		jBasicB.add(prop.toString());
 		return jBasicB.build();
+	}
+
+	public static Shape readJsonArray(JsonArray jShape) {
+		int i = 0;
+		String className = jShape.get(i++).toString();
+		try {
+			Shape readShape = (Shape) Class.forName(className).newInstance();
+			readShape.setColor(getJsonColor(jShape.get(i++)));
+			readShape.setFillColor(getJsonColor(jShape.get(i++)));
+			Point center = new Point((int) Double.parseDouble(jShape.get(i++).toString()), (int) Double.parseDouble(jShape.get(i++).toString()));
+			readShape.setPosition(center);
+			readShape.setProperties(readMap(jShape.get(i++).toString()));
+			return readShape;
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static Color getJsonColor (JsonValue jV) {
+		JsonArray jColor = (JsonArray) jV;
+		float red, green, blue;
+		red = Float.parseFloat(jColor.get(0).toString());
+		green = Float.parseFloat(jColor.get(1).toString());
+		blue = Float.parseFloat(jColor.get(2).toString());
+		return new Color(red, green, blue);
 	}
 
 	public String toString() {

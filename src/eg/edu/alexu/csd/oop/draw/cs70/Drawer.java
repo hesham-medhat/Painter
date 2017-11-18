@@ -1,7 +1,5 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.io.*;
@@ -202,7 +200,7 @@ public class Drawer implements DrawingEngine {
 	}
 
 	@Override
-	public void save(final String path) {
+	public void save(final String path) throws Exception {
 		if (path == null || !path.contains(".")) {
 			throw new RuntimeException("Invalid path.");
 		}
@@ -268,14 +266,13 @@ public class Drawer implements DrawingEngine {
 				e.printStackTrace();
 			}
 		} else {
-			System.err.println("Invalid extension.");
+			throw new RuntimeException("Invalid extension.");
 		}
 
 	}
 
-
 	@Override
-	public void load(final String path) {
+	public void load(final String path) throws Exception {
 		if (path == null || path.length() < 5 || !path.contains(".")) {
 			throw new RuntimeException("Invalid path.");
 		}
@@ -286,7 +283,7 @@ public class Drawer implements DrawingEngine {
 			try {
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				dom = db.parse(path);
-				shapes = new ArrayList<Shape>();
+				clearDS();
 				NodeList nl = dom.getFirstChild().getChildNodes();
 				for (int i = 0; i < nl.getLength(); i++) {
 					Node n = nl.item(i);
@@ -297,7 +294,17 @@ public class Drawer implements DrawingEngine {
 				e.printStackTrace();
 			}
 		} else if (extension.equals("json")) {
-			//TODO: Load in JSON.
+			FileReader reader = new FileReader(path);
+			JsonReader jr = Json.createReader(reader);
+			JsonArray shapesArray = jr.readArray();
+			clearDS();
+			if (shapesArray != null) {
+				for (JsonValue jO : shapesArray) {
+					JsonArray jShape = (JsonArray) jO;
+					Shape readShape = Stroke.readJsonArray(jShape);
+					shapes.add(readShape);
+				}
+			}
 		} else {
 			throw new RuntimeException("Invalid extension.");
 		}
@@ -308,6 +315,12 @@ public class Drawer implements DrawingEngine {
 			array.remove(0);
 		}
 		array.add(command);
+	}
+
+	private void clearDS() {
+		actionsPerformed.clear();
+		actionsUNPerformed.clear();
+		shapes.clear();
 	}
 
 }
