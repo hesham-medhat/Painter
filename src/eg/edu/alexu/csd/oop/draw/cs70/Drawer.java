@@ -1,11 +1,17 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
 import java.awt.Graphics;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 //import java.io.File;
 //import java.net.URL;
 //import java.io.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import javax.xml.parsers.*;
 //import javax.json.*;
@@ -45,6 +51,8 @@ public class Drawer implements DrawingEngine {
 	 */
 	private final ArrayList<ICommand> actionsUNPerformed =
 			new ArrayList<>();
+	private boolean pluginFound = false;
+	private Class<? extends Shape> pluginShape;
 
 
 	@Override
@@ -88,6 +96,34 @@ public class Drawer implements DrawingEngine {
 		return shapesArr;
 	}
 
+	@SuppressWarnings("unchecked")
+	public Class<? extends Shape> findPlugin(String path) {
+		try {
+			JarFile jarFile = new JarFile(path);
+			Enumeration<JarEntry> en = jarFile.entries();
+			URL[] urls = { new URL("jar:file:" + path+"!/") };
+			URLClassLoader cl = URLClassLoader.newInstance(urls);
+			Class<?extends eg.edu.alexu.csd.oop.draw.Shape> c = null;
+			while (en.hasMoreElements()) {
+				JarEntry je = en.nextElement();
+				if(je.isDirectory() || !je.getName().endsWith(".class")){
+					continue;
+				}
+				jarFile.close();
+				// -6 because of .class
+				String className = je.getName().substring(0,je.getName().length()-6);
+				className = className.replace('/', '.');
+				c = (Class<? extends eg.edu.alexu.csd.oop.draw.Shape>) cl.loadClass(className);
+			}
+			pluginFound = true;
+			pluginShape = c;
+			return c;
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public List<Class<? extends Shape>> getSupportedShapes() {
@@ -106,6 +142,9 @@ public class Drawer implements DrawingEngine {
 			result.add(shape);
 			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Triangle");
 			result.add(shape);
+			if (pluginFound) {
+				result.add(pluginShape);
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

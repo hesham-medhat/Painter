@@ -225,8 +225,18 @@ public class Controller {
 	@FXML
 	private void makePlugin(final ActionEvent e) {
 		readColours();
-		drawingNow = "plugin"; // TODO
-		paneInteraction(true);
+		drawingNow = "plugin";
+		
+		try {
+			eg.edu.alexu.csd.oop.draw.Shape plugIn = drawer.findPlugin(path.getText()).newInstance();
+			drawer.addShape(plugIn, drawingPane);
+			paneInteraction(true);
+		} catch (InstantiationException | IllegalAccessException e1) {
+			feedback.setText("Couldn't make plugin.");
+			finishDrawing();
+			e1.printStackTrace();
+		}
+		
 	}
 
 	private void drawLine() {
