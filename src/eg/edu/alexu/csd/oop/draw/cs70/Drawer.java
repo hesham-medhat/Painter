@@ -317,6 +317,10 @@ public class Drawer implements DrawingEngine {
 		array.add(command);
 	}
 
+	public boolean isPluginFound() {
+		return pluginFound;
+	}
+
 	private void clearDS() {
 		actionsPerformed.clear();
 		actionsUNPerformed.clear();

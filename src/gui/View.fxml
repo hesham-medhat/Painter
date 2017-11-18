@@ -29,9 +29,9 @@
       </Pane>
       <Label fx:id="feedback" layoutX="133.0" layoutY="88.0" prefHeight="17.0" prefWidth="586.0" text="Start by picking what to draw!" textFill="#3300ff" />
       <Separator layoutX="11.0" layoutY="341.0" prefHeight="9.0" prefWidth="107.0" />
-      <JFXButton fx:id="pluginMaker" layoutX="25.0" layoutY="438.0" onAction="#makePlugin" text="Draw Shape" />
+      <JFXButton fx:id="pluginMaker" disable="true" layoutX="25.0" layoutY="438.0" onAction="#makePlugin" text="Draw Shape" />
       <Label layoutX="8.0" layoutY="358.0" text="Custom Shape Plugin" textFill="#2e8cc6" />
-      <JFXButton fx:id="pluginFinder" layoutX="27.0" layoutY="391.0" text="Find plugin" />
+      <JFXButton fx:id="pluginFinder" layoutX="27.0" layoutY="391.0" onAction="#findPlugin" text="Find plugin" />
       <JFXButton fx:id="load" layoutX="468.0" layoutY="24.0" onAction="#loadState" prefHeight="25.0" prefWidth="76.0" text="Load" />
       <JFXButton fx:id="save" layoutX="378.0" layoutY="24.0" onAction="#saveState" prefHeight="25.0" prefWidth="81.0" text="Save" />
       <JFXButton layoutX="290.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Redo" />

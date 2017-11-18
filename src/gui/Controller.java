@@ -156,6 +156,14 @@ public class Controller {
 		}
 	}
 
+	@FXML
+	private void findPlugin(ActionEvent ae) {
+		drawer.findPlugin(path.getText());
+		if (drawer.isPluginFound()) {
+			pluginMaker.setDisable(false);
+		}
+	}
+
 	private void expectAction(boolean set) {
 		expectingAction = set;
 		if (!set) {// Deselect all.
