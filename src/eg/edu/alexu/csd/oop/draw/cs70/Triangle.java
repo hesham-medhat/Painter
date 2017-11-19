@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ColourAdapter;
 
 /**
  * Holds data for ellipse representation.
@@ -97,6 +98,16 @@ public class Triangle extends Stroke {
 						prop.get("p2y"), prop.get("p3y"));
 		cloneBasic(newTriangle, this);
 		return newTriangle;
+	}
+
+	@Override
+	public javafx.scene.shape.Shape makeFx() {
+		javafx.scene.shape.Polygon fxTriangle = new javafx.scene.shape.Polygon();
+		fxTriangle.getPoints().addAll(new Double[] { prop.get("p1x"), prop.get("p1y"),
+				prop.get("p2x"), prop.get("p2y"), prop.get("p3x"), prop.get("p3y") });
+		fxTriangle.setFill(ColourAdapter.getFxColour(fill));
+		fxTriangle.setStroke(ColourAdapter.getFxColour(color));
+		return fxTriangle;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ColourAdapter;
 
 /**
  * Holds data for square representation.
@@ -66,6 +67,14 @@ public class Square extends Stroke {
 				prop.get("rotated"));
 		cloneBasic(newSquare, this);
 		return newSquare;
+	}
+
+	@Override
+	public javafx.scene.shape.Shape makeFx() {
+		javafx.scene.shape.Rectangle fxSquare = new javafx.scene.shape.Rectangle(prop.get("ulx"),prop.get("uly"), prop.get("sideL"), prop.get("sideL"));
+		fxSquare.setFill(ColourAdapter.getFxColour(fill));
+		fxSquare.setStroke(ColourAdapter.getFxColour(color));
+		return fxSquare;
 	}
 
 }

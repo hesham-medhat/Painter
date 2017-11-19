@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ColourAdapter;
 
 /**
  * Holds data for line segment representation.
@@ -64,6 +65,14 @@ public class LineSegment extends Stroke {
 				prop.get("spy"));
 		cloneBasic(newLineSegment, this);
 		return newLineSegment;
+	}
+
+	@Override
+	public javafx.scene.shape.Shape makeFx() {
+		javafx.scene.shape.Line fxLine = new javafx.scene.shape.Line(prop.get("fpx"), prop.get("fpy"), prop.get("spx"),prop.get("spy"));
+		fxLine.setFill(ColourAdapter.getFxColour(fill));
+		fxLine.setStroke(ColourAdapter.getFxColour(color));
+		return fxLine;
 	}
 
 }

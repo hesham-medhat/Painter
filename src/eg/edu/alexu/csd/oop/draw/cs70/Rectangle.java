@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ColourAdapter;
 
 /**
  * Holds data for rectangle representation.
@@ -73,6 +74,14 @@ public class Rectangle extends Stroke {
 				prop.get("rotated"));
 		cloneBasic(newRectangle, this);
 		return newRectangle;
+	}
+
+	@Override
+	public javafx.scene.shape.Shape makeFx() {
+		javafx.scene.shape.Rectangle fxRec = new javafx.scene.shape.Rectangle(prop.get("ulx"),prop.get("uly"), prop.get("width"), prop.get("height"));
+		fxRec.setFill(ColourAdapter.getFxColour(fill));
+		fxRec.setStroke(ColourAdapter.getFxColour(color));
+		return fxRec;
 	}
 
 }

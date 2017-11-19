@@ -4,6 +4,7 @@ import java.awt.Point;
 
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ColourAdapter;
 
 /**
  * Holds data for ellipse representation.
@@ -62,6 +63,14 @@ public class Ellipse extends Stroke {
 				prop.get("centerY"));
 		cloneBasic(newEllipse, this);
 		return newEllipse;
+	}
+
+	@Override
+	public javafx.scene.shape.Shape makeFx() {
+		javafx.scene.shape.Ellipse fxEllipse = new javafx.scene.shape.Ellipse(center.getX(), center.getY(), prop.get("radiusX"),prop.get("radiusY"));
+		fxEllipse.setFill(ColourAdapter.getFxColour(fill));
+		fxEllipse.setStroke(ColourAdapter.getFxColour(color));
+		return fxEllipse;
 	}
 
 }
