@@ -27,6 +27,7 @@ import eg.edu.alexu.csd.oop.draw.DrawingEngine;
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ShapeController;
 import javafx.scene.layout.Pane;
 
 public class Drawer implements DrawingEngine {
@@ -67,27 +68,27 @@ public class Drawer implements DrawingEngine {
 	}
 
 	@Override
-	public void addShape(final Shape shape, Pane drawingPane) {
-		shapes.add(shape);
-		final DrawCommand draw = new DrawCommand(shape, drawingPane);
+	public void addShape(Pane drawingPane,final ShapeController sc) {
+		shapes.add(sc.getShape());
+		final DrawCommand draw = new DrawCommand(drawingPane , sc );
 		draw.execute();
 		addCommand(actionsPerformed, draw);
 		actionsUNPerformed.clear();
 	}
 
 	@Override
-	public void removeShape(final Shape shape, Pane drawingPane) {
-		shapes.remove(shape);
-		final RemoveCommand remove = new RemoveCommand(shape);
+	public void removeShape(Pane drawingPane ,final ShapeController sc) {
+		shapes.remove(sc.getShape());
+		final RemoveCommand remove = new RemoveCommand(drawingPane , sc);
 		remove.execute();
 		addCommand(actionsPerformed, remove);
 	}
 
 	@Override
-	public void updateShape(final Shape oldShape, final Shape newShape, Pane drawingPane) {
-		shapes.remove(oldShape);
-		shapes.add(newShape);
-		UpdateCommand update = new UpdateCommand(oldShape, newShape);
+	public void updateShape(Pane drawingPane, final ShapeController oldShape, final ShapeController newShape) {
+		shapes.remove(oldShape.getShape());
+		shapes.add(newShape.getShape());
+		UpdateCommand update = new UpdateCommand(drawingPane , oldShape,newShape);
 		update.execute();
 		addCommand(actionsPerformed, update);
 	}

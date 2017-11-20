@@ -2,9 +2,13 @@ package eg.edu.alexu.csd.oop.draw.cs70;
 
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
+import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ShapeController;
+import javafx.scene.layout.Pane;
 
 /**
  * Class that updates a shape.
+ * 
  * @author Marina
  *
  */
@@ -30,21 +34,33 @@ public class UpdateCommand implements ICommand {
 	 * Reference of the new shape that is updated with.
 	 */
 	private final Shape newShape;
+	private Pane drawingPane;
+	ShapeController scNew;
+	ShapeController scOld;
+
 
 	/**
 	 * The one and only constructor.
-	 * @param oldShape to be updated.
-	 * @param newShape to be updated to.
+	 * 
+	 * @param oldShape
+	 *            to be updated.
+	 * @param newShape
+	 *            to be updated to.
 	 */
-	public UpdateCommand(final Shape oldShape, final Shape newShape) {
+	public UpdateCommand(Pane drawingPane, ShapeController scNew , ShapeController scOld ) {
 		super();
-		this.oldShape = oldShape;
-		this.newShape = newShape;
+		this.oldShape = scOld.getShape();
+		this.newShape = scNew.getShape();
+		this.drawingPane = drawingPane;
+
 	}
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		newShape.draw(drawingPane);
+		drawingPane.getChildren().remove(((Stroke) oldShape).getFxShape());
+		scNew.enableSelect(true);
+		scOld.enableSelect(false);
 
 	}
 
@@ -65,7 +81,10 @@ public class UpdateCommand implements ICommand {
 
 	@Override
 	public void unexecute() {
-		// TODO Auto-generated method stub
+		drawingPane.getChildren().remove(((Stroke) newShape).getFxShape());
+		oldShape.draw(drawingPane);
+		scNew.enableSelect(false);
+		scOld.enableSelect(true);
 
 	}
 

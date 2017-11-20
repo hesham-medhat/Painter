@@ -1,16 +1,17 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import gui.ShapeController;
 import javafx.scene.layout.Pane;
 
 public interface DrawingEngine {
 	/* redraw all shapes on the canvas */
 	public void refresh(Pane canvas);
 
-	public void addShape(Shape shape, Pane drawingPane);
+	public void addShape(Pane drawingPane , ShapeController sc);
 
-	public void removeShape(Shape shape, Pane drawingPane);
+	public void removeShape(Pane drawingPane , ShapeController sc);
 
-	public void updateShape(Shape oldShape, Shape newShape, Pane drawingPane);
+	public void updateShape(Pane drawingPane , ShapeController oldShape, ShapeController newShape);
 
 	/* return the created shapes objects */
 	public Shape[] getShapes();

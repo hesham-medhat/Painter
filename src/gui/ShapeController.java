@@ -10,8 +10,16 @@ import javafx.scene.layout.Pane;
 
 public class ShapeController {
 
-	protected Shape shape;
+	private Shape shape;
+	/**
+	 * @return the shape
+	 */
+	public Shape getShape() {
+		return shape;
+	}
+
 	private boolean selected;
+	private boolean selectEnable;
 	private DrawingEngine drawer;
 	protected Pane drawingPane;
 
@@ -19,6 +27,7 @@ public class ShapeController {
 		shape = shapeIn;
 		drawer = drawerIn;
 		drawingPane = drawingPaneIn;
+		selectEnable = true;
 	}
 
 	protected void move(Point2D clickDifference) {
@@ -27,7 +36,8 @@ public class ShapeController {
 			newShape = (Shape) shape.clone();
 			((Stroke) newShape).setFxShape(this.getFx());
 			Point oldPosition = shape.getPosition();
-			Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()), (int) (clickDifference.getY() + oldPosition.getY()));
+			Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()),
+					(int) (clickDifference.getY() + oldPosition.getY()));
 			newShape.setPosition(newPosition);
 			this.getFx().relocate(newPosition.getX(), newPosition.getY());
 			drawer.updateShape(shape, newShape, drawingPane);
@@ -46,12 +56,14 @@ public class ShapeController {
 		}
 		javafx.scene.shape.Shape newFx = ((Stroke) shape).makeFx();
 		Point oldPosition = shape.getPosition();
-		Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()), (int) (clickDifference.getY() + oldPosition.getY()));
+		Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()),
+				(int) (clickDifference.getY() + oldPosition.getY()));
 		newFx.relocate(newPosition.getX(), newPosition.getY());
 		newShape.setPosition(newPosition);
 		((Stroke) newShape).setFxShape(newFx);
-		drawer.addShape(newShape, drawingPane);
-		return new ShapeController(drawingPane, drawer, newShape);
+		ShapeController sc = new ShapeController(drawingPane, drawer, newShape);
+		drawer.addShape(drawingPane , sc);
+		return sc ; 
 	}
 
 	/**
@@ -62,10 +74,11 @@ public class ShapeController {
 	}
 
 	/**
-	 * @param selectedSet the selected to set
+	 * @param selectedSet
+	 *            the selected to set
 	 */
 	public void setSelected(boolean selectedSet) {
-		this.selected = selectedSet;
+		this.selected = selectedSet && selectEnable;
 		if (selectedSet) {
 			((Stroke) shape).getFxShape().setStrokeWidth(3.0);
 		} else {
@@ -75,10 +88,15 @@ public class ShapeController {
 
 	/**
 	 * Returns the fxShape of the shape that this controller controls.
+	 * 
 	 * @return fxShape GUI representation.
 	 */
 	public javafx.scene.shape.Shape getFx() {
 		return ((Stroke) shape).getFxShape();
+	}
+
+	public void enableSelect(boolean enable) {
+		selectEnable = enable;
 	}
 
 }
