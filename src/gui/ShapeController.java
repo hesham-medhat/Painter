@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 public class ShapeController {
 
 	private Shape shape;
+
 	/**
 	 * @return the shape
 	 */
@@ -31,20 +32,15 @@ public class ShapeController {
 	}
 
 	protected void move(Point2D clickDifference) {
-		Shape newShape = null;
-		try {
-			newShape = (Shape) shape.clone();
-			((Stroke) newShape).setFxShape(this.getFx());
-			Point oldPosition = shape.getPosition();
-			Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()),
-					(int) (clickDifference.getY() + oldPosition.getY()));
-			newShape.setPosition(newPosition);
-			this.getFx().relocate(newPosition.getX(), newPosition.getY());
-			drawer.updateShape(shape, newShape, drawingPane);
-			shape = newShape;
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+
+		ShapeController newsc = this;
+		Point oldPosition = shape.getPosition();
+		Point newPosition = new Point((int) (clickDifference.getX() + oldPosition.getX()),
+				(int) (clickDifference.getY() + oldPosition.getY()));
+		newsc.getShape().setPosition(newPosition);
+		newsc.getFx().relocate(newPosition.getX(), newPosition.getY());
+		drawer.updateShape(drawingPane, this, newsc);
+
 	}
 
 	protected ShapeController copy(Point2D clickDifference) {
@@ -62,8 +58,8 @@ public class ShapeController {
 		newShape.setPosition(newPosition);
 		((Stroke) newShape).setFxShape(newFx);
 		ShapeController sc = new ShapeController(drawingPane, drawer, newShape);
-		drawer.addShape(drawingPane , sc);
-		return sc ; 
+		drawer.addShape(drawingPane, sc);
+		return sc;
 	}
 
 	/**
