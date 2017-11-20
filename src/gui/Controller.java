@@ -399,8 +399,8 @@ public class Controller {
 				}
 			} else if (drawingNow.equals("square")) {
 				if (drawingRec != null) {
-					setWidthInRange(me);
-					setHeightInRange(me);
+					drawingRec.setWidth(Math.abs(me.getX() - firstClick.getX()));
+					drawingRec.setHeight(Math.abs(me.getX() - firstClick.getX()));
 				}
 			} else if (drawingNow.equals("ellipse")) {
 				if (drawingEllipse != null) {
@@ -448,7 +448,7 @@ public class Controller {
 				feedback.setText("Set the ellipse's width.");
 			} else if (drawingNow.equals("square")) {
 				drawingRec = new Rectangle(firstClick.getX(), firstClick.getY(),
-						Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getY() - firstClick.getY()));
+						Math.abs(firstClick.getX() - me.getX()), Math.abs(me.getX() - firstClick.getX()));
 				colorVisualShape(drawingRec);
 				drawingPane.getChildren().add(drawingRec);
 				feedback.setText("Set the square's lower right corner.");
