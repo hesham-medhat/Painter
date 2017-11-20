@@ -8,6 +8,7 @@ import gui.ColourAdapter;
 
 /**
  * Holds data for circle representation.
+ * 
  * @author H
  *
  */
@@ -25,12 +26,15 @@ public class Circle extends Stroke {
 
 	/**
 	 * Constructor given props as is.
-	 * @param radius radius of the circle.
-	 * @param centerX x-coordinate of the center.
-	 * @param centerY y-coordinate of the center.
+	 * 
+	 * @param radius
+	 *            radius of the circle.
+	 * @param centerX
+	 *            x-coordinate of the center.
+	 * @param centerY
+	 *            y-coordinate of the center.
 	 */
-	public Circle(final double radius,
-			final double centerX, final double centerY) {
+	public Circle(final double radius, final double centerX, final double centerY) {
 		super();
 		prop.put("radius", radius);
 		prop.put("centerX", centerX);
@@ -41,8 +45,11 @@ public class Circle extends Stroke {
 
 	/**
 	 * Constructor given radius and center as Point object.
-	 * @param radius radius of the circle.
-	 * @param center center of the circle as Point object.
+	 * 
+	 * @param radius
+	 *            radius of the circle.
+	 * @param center
+	 *            center of the circle as Point object.
 	 */
 	public Circle(final double radius, final Point center) {
 		super();
@@ -51,18 +58,18 @@ public class Circle extends Stroke {
 		prop.put("centerY", center.getY());
 		setPosition(center);
 	}
-	
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Shape newCircle = new Circle(prop.get("radius"),
-				prop.get("centerX"), prop.get("centerY"));
+		Shape newCircle = new Circle(prop.get("radius"), prop.get("centerX"), prop.get("centerY"));
 		cloneBasic(newCircle, this);
 		return newCircle;
 	}
 
 	@Override
 	public javafx.scene.shape.Shape makeFx() {
-		javafx.scene.shape.Circle fxCircle = new javafx.scene.shape.Circle(center.getX(), center.getY(), prop.get("radius"));
+		javafx.scene.shape.Circle fxCircle = new javafx.scene.shape.Circle(center.getX(), center.getY(),
+				prop.get("radius"));
 		fxCircle.setFill(ColourAdapter.getFxColour(fill));
 		fxCircle.setStroke(ColourAdapter.getFxColour(color));
 		return fxCircle;

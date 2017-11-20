@@ -8,6 +8,7 @@ import gui.ColourAdapter;
 
 /**
  * Holds data for rectangle representation.
+ * 
  * @author H
  *
  */
@@ -29,13 +30,17 @@ public class Rectangle extends Stroke {
 
 	/**
 	 * Constructor if props were given as is.
-	 * @param ulx upper left corner's x-coordinate.
-	 * @param uly upper left corner's y-coordinate.
-	 * @param width horizontal length of the rectangle.
-	 * @param height vertical length of the rectangle.
+	 * 
+	 * @param ulx
+	 *            upper left corner's x-coordinate.
+	 * @param uly
+	 *            upper left corner's y-coordinate.
+	 * @param width
+	 *            horizontal length of the rectangle.
+	 * @param height
+	 *            vertical length of the rectangle.
 	 */
-	public Rectangle (final double ulx, final double uly,
-			final double width, final double height) {
+	public Rectangle(final double ulx, final double uly, final double width, final double height) {
 		super();
 		prop.put("ulx", ulx);
 		prop.put("uly", uly);
@@ -47,14 +52,16 @@ public class Rectangle extends Stroke {
 	}
 
 	/**
-	 * Constructor if given upper left corner and side
-	 * length.
-	 * @param ul upper left corner given as Point object.
-	 * @param width horizontal length of the square.
-	 * @param height vertical length of the rectangle.
+	 * Constructor if given upper left corner and side length.
+	 * 
+	 * @param ul
+	 *            upper left corner given as Point object.
+	 * @param width
+	 *            horizontal length of the square.
+	 * @param height
+	 *            vertical length of the rectangle.
 	 */
-	public Rectangle(final Point ul, final double width,
-			final double height) {
+	public Rectangle(final Point ul, final double width, final double height) {
 		super();
 		prop.put("ulx", ul.getX());
 		prop.put("uly", ul.getY());
@@ -67,18 +74,16 @@ public class Rectangle extends Stroke {
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Shape newRectangle = new Rectangle(prop.get("ulx"),
-				prop.get("uly"), prop.get("width"),
-				prop.get("height"));
-		newRectangle.getProperties().put("rotated",
-				prop.get("rotated"));
+		Shape newRectangle = new Rectangle(prop.get("ulx"), prop.get("uly"), prop.get("width"), prop.get("height"));
+		newRectangle.getProperties().put("rotated", prop.get("rotated"));
 		cloneBasic(newRectangle, this);
 		return newRectangle;
 	}
 
 	@Override
 	public javafx.scene.shape.Shape makeFx() {
-		javafx.scene.shape.Rectangle fxRec = new javafx.scene.shape.Rectangle(prop.get("ulx"),prop.get("uly"), prop.get("width"), prop.get("height"));
+		javafx.scene.shape.Rectangle fxRec = new javafx.scene.shape.Rectangle(prop.get("ulx"), prop.get("uly"),
+				prop.get("width"), prop.get("height"));
 		fxRec.setFill(ColourAdapter.getFxColour(fill));
 		fxRec.setStroke(ColourAdapter.getFxColour(color));
 		return fxRec;

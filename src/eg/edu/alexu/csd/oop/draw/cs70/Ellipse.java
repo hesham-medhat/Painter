@@ -8,6 +8,7 @@ import gui.ColourAdapter;
 
 /**
  * Holds data for ellipse representation.
+ * 
  * @author H
  *
  */
@@ -26,13 +27,17 @@ public class Ellipse extends Stroke {
 
 	/**
 	 * Constructor if props were given as is.
-	 * @param radiusX horizontal radius.
-	 * @param radiusY vertical radius.
-	 * @param centerX x-coordinate of the center.
-	 * @param centerY y-coordinate of the center.
+	 * 
+	 * @param radiusX
+	 *            horizontal radius.
+	 * @param radiusY
+	 *            vertical radius.
+	 * @param centerX
+	 *            x-coordinate of the center.
+	 * @param centerY
+	 *            y-coordinate of the center.
 	 */
-	public Ellipse(final double radiusX, final double radiusY,
-			final double centerX, final double centerY) {
+	public Ellipse(final double radiusX, final double radiusY, final double centerX, final double centerY) {
 		prop.put("radiusX", radiusX);
 		prop.put("radiusY", radiusY);
 		prop.put("centerX", centerX);
@@ -43,12 +48,15 @@ public class Ellipse extends Stroke {
 
 	/**
 	 * Constructor if center as Point object.
-	 * @param radiusX horizontal radius.
-	 * @param radiusY vertical radius.
-	 * @param center as Point object.
+	 * 
+	 * @param radiusX
+	 *            horizontal radius.
+	 * @param radiusY
+	 *            vertical radius.
+	 * @param center
+	 *            as Point object.
 	 */
-	public Ellipse(final double radiusX, final double radiusY,
-			final Point center) {
+	public Ellipse(final double radiusX, final double radiusY, final Point center) {
 		prop.put("radiusX", radiusX);
 		prop.put("radiusY", radiusY);
 		prop.put("centerX", center.getX());
@@ -58,8 +66,7 @@ public class Ellipse extends Stroke {
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Shape newEllipse = new Ellipse(prop.get("radiusX"),
-				prop.get("radiusY"), prop.get("centerX"),
+		Shape newEllipse = new Ellipse(prop.get("radiusX"), prop.get("radiusY"), prop.get("centerX"),
 				prop.get("centerY"));
 		cloneBasic(newEllipse, this);
 		return newEllipse;
@@ -67,7 +74,8 @@ public class Ellipse extends Stroke {
 
 	@Override
 	public javafx.scene.shape.Shape makeFx() {
-		javafx.scene.shape.Ellipse fxEllipse = new javafx.scene.shape.Ellipse(center.getX(), center.getY(), prop.get("radiusX"),prop.get("radiusY"));
+		javafx.scene.shape.Ellipse fxEllipse = new javafx.scene.shape.Ellipse(center.getX(), center.getY(),
+				prop.get("radiusX"), prop.get("radiusY"));
 		fxEllipse.setFill(ColourAdapter.getFxColour(fill));
 		fxEllipse.setStroke(ColourAdapter.getFxColour(color));
 		return fxEllipse;

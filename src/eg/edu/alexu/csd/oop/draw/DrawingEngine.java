@@ -7,11 +7,11 @@ public interface DrawingEngine {
 	/* redraw all shapes on the canvas */
 	public void refresh(Pane canvas);
 
-	public void addShape(Pane drawingPane , ShapeController sc);
+	public void addShape(Pane drawingPane, ShapeController sc);
 
-	public void removeShape(Pane drawingPane , ShapeController sc);
+	public void removeShape(Pane drawingPane, ShapeController sc);
 
-	public void updateShape(Pane drawingPane , ShapeController oldShape, ShapeController newShape);
+	public void updateShape(Pane drawingPane, ShapeController oldShape, ShapeController newShape);
 
 	/* return the created shapes objects */
 	public Shape[] getShapes();

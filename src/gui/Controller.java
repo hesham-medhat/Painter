@@ -190,7 +190,7 @@ public class Controller {
 		visual.setFill(fc);
 		visual.setStroke(bc);
 	}
-	
+
 	@FXML
 	private void undo(final ActionEvent e) {
 		drawer.undo();
@@ -254,18 +254,18 @@ public class Controller {
 	private void makePlugin(final ActionEvent e) {
 		readColours();
 		drawingNow = "plugin";
-		
+
 		try {
 			eg.edu.alexu.csd.oop.draw.Shape plugIn = drawer.findPlugin(path.getText()).newInstance();
 			ShapeController shapeController = new ShapeController(drawingPane, drawer, plugIn);
-			drawer.addShape(drawingPane , shapeController);
+			drawer.addShape(drawingPane, shapeController);
 			paneInteraction(true);
 		} catch (InstantiationException | IllegalAccessException e1) {
 			feedback.setText("Couldn't make plugin.");
 			finishDrawing();
 			e1.printStackTrace();
 		}
-		
+
 	}
 
 	private void drawLine() {
@@ -278,7 +278,7 @@ public class Controller {
 		drawingPane.getChildren().remove(drawingLine);
 		ColourAdapter.setColours(line, fc, bc);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, line);
-		drawer.addShape(drawingPane , shapeController);
+		drawer.addShape(drawingPane, shapeController);
 		shapeControllerList.add(shapeController);
 		finishDrawing();
 	}
@@ -292,7 +292,7 @@ public class Controller {
 		ColourAdapter.setColours(circle, fc, bc);
 		drawingPane.getChildren().remove(drawingCircle);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, circle);
-		drawer.addShape(drawingPane , shapeController);
+		drawer.addShape(drawingPane, shapeController);
 		shapeControllerList.add(shapeController);
 		finishDrawing();
 	}
@@ -308,7 +308,7 @@ public class Controller {
 		drawingPane.getChildren().remove(drawingLine);
 		drawingPane.getChildren().remove(drawingEllipse);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, ellipse);
-		drawer.addShape(drawingPane , shapeController);
+		drawer.addShape(drawingPane, shapeController);
 		shapeControllerList.add(shapeController);
 		finishDrawing();
 	}
@@ -322,7 +322,7 @@ public class Controller {
 		drawingPane.getChildren().remove(drawingLine);
 		drawingPane.getChildren().remove(drawingRec);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, rectangle);
-		drawer.addShape(drawingPane , shapeController);
+		drawer.addShape(drawingPane, shapeController);
 		shapeControllerList.add(shapeController);
 		finishDrawing();
 	}
@@ -336,7 +336,7 @@ public class Controller {
 		drawingPane.getChildren().remove(drawingLine);
 		drawingPane.getChildren().remove(drawingRec);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, square);
-		drawer.addShape( drawingPane , shapeController);
+		drawer.addShape(drawingPane, shapeController);
 		shapeControllerList.add(shapeController);
 		finishDrawing();
 	}
@@ -350,7 +350,7 @@ public class Controller {
 		drawingPane.getChildren().remove(drawingLine);
 		drawingPane.getChildren().remove(drawingTriangle);
 		ShapeController shapeController = new ShapeController(drawingPane, drawer, triangle);
-		drawer.addShape(drawingPane , shapeController);
+		drawer.addShape(drawingPane, shapeController);
 		shapeControllerList.add(shapeController);
 		finishDrawing();
 	}
@@ -377,7 +377,8 @@ public class Controller {
 				for (ShapeController sc : selectedShapes) {
 					Point2D centerDifference = getCenterRelative(me);
 					Point oldPosition = sc.getShape().getPosition();
-					sc.getFx().relocate(centerDifference.getX() + oldPosition.getX(), centerDifference.getY() + oldPosition.getY());
+					sc.getFx().relocate(centerDifference.getX() + oldPosition.getX(),
+							centerDifference.getY() + oldPosition.getY());
 				}
 			}
 		} else {
@@ -456,7 +457,7 @@ public class Controller {
 				feedback.setText("Set the triangle's second vertex.");
 			} else if (drawingNow.equals("move")) {
 				for (ShapeController sc : selectedShapes) {
-					sc.move(getCenterRelative(me));
+					shapeControllerList.add(sc.move(getCenterRelative(me)));
 					sc.setSelected(false);
 				}
 				finishDrawing();
@@ -584,7 +585,7 @@ public class Controller {
 			findSelected();
 			for (ShapeController sc : selectedShapes) {
 				drawingPane.getChildren().remove(sc.getFx());
-				drawer.removeShape(drawingPane , sc);
+				drawer.removeShape(drawingPane, sc);
 				sc.setSelected(false);
 			}
 			selectedShapes.clear();
@@ -600,7 +601,7 @@ public class Controller {
 		}
 	}
 
-	private Point2D getCenterRelative (MouseEvent mouse) {
+	private Point2D getCenterRelative(MouseEvent mouse) {
 		return new Point2D(mouse.getX() - cc.getLayoutX(), mouse.getY() - cc.getLayoutY());
 	}
 

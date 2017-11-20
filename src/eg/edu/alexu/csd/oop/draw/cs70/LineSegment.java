@@ -8,6 +8,7 @@ import gui.ColourAdapter;
 
 /**
  * Holds data for line segment representation.
+ * 
  * @author H
  *
  */
@@ -26,14 +27,17 @@ public class LineSegment extends Stroke {
 
 	/**
 	 * Constructor if points were given as coordinates.
-	 * @param fpx first point's x coordinate.
-	 * @param fpy first point's y coordinate.
-	 * @param spx second point's x coordinate.
-	 * @param spy second point's y coordinate.
+	 * 
+	 * @param fpx
+	 *            first point's x coordinate.
+	 * @param fpy
+	 *            first point's y coordinate.
+	 * @param spx
+	 *            second point's x coordinate.
+	 * @param spy
+	 *            second point's y coordinate.
 	 */
-	public LineSegment(final double fpx,
-			final double fpy, final double spx,
-			final double spy) {
+	public LineSegment(final double fpx, final double fpy, final double spx, final double spy) {
 		super();
 		prop.put("fpx", fpx);
 		prop.put("fpy", fpy);
@@ -45,8 +49,11 @@ public class LineSegment extends Stroke {
 
 	/**
 	 * Constructor if start-end points were given as Points.
-	 * @param fp first point.
-	 * @param sp second point.
+	 * 
+	 * @param fp
+	 *            first point.
+	 * @param sp
+	 *            second point.
 	 */
 	public LineSegment(final Point fp, final Point sp) {
 		super();
@@ -60,16 +67,15 @@ public class LineSegment extends Stroke {
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Shape newLineSegment = new LineSegment(prop.get("fpx"),
-				prop.get("fpy"), prop.get("spx"),
-				prop.get("spy"));
+		Shape newLineSegment = new LineSegment(prop.get("fpx"), prop.get("fpy"), prop.get("spx"), prop.get("spy"));
 		cloneBasic(newLineSegment, this);
 		return newLineSegment;
 	}
 
 	@Override
 	public javafx.scene.shape.Shape makeFx() {
-		javafx.scene.shape.Line fxLine = new javafx.scene.shape.Line(prop.get("fpx"), prop.get("fpy"), prop.get("spx"),prop.get("spy"));
+		javafx.scene.shape.Line fxLine = new javafx.scene.shape.Line(prop.get("fpx"), prop.get("fpy"), prop.get("spx"),
+				prop.get("spy"));
 		fxLine.setFill(ColourAdapter.getFxColour(fill));
 		fxLine.setStroke(ColourAdapter.getFxColour(color));
 		return fxLine;

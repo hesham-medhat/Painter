@@ -38,7 +38,6 @@ public class UpdateCommand implements ICommand {
 	ShapeController scNew;
 	ShapeController scOld;
 
-
 	/**
 	 * The one and only constructor.
 	 * 
@@ -47,7 +46,7 @@ public class UpdateCommand implements ICommand {
 	 * @param newShape
 	 *            to be updated to.
 	 */
-	public UpdateCommand(Pane drawingPane, ShapeController scNew , ShapeController scOld ) {
+	public UpdateCommand(Pane drawingPane, ShapeController scNew, ShapeController scOld) {
 		super();
 		this.oldShape = scOld.getShape();
 		this.newShape = scNew.getShape();

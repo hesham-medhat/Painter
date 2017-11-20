@@ -8,6 +8,7 @@ import gui.ColourAdapter;
 
 /**
  * Holds data for square representation.
+ * 
  * @author H
  *
  */
@@ -28,12 +29,15 @@ public class Square extends Stroke {
 
 	/**
 	 * Constructor if props were given as is.
-	 * @param ulx upper left corner's x-coordinate.
-	 * @param uly upper left corner's y-coordinate.
-	 * @param sideL side length of the square.
+	 * 
+	 * @param ulx
+	 *            upper left corner's x-coordinate.
+	 * @param uly
+	 *            upper left corner's y-coordinate.
+	 * @param sideL
+	 *            side length of the square.
 	 */
-	public Square(final double ulx, final double uly,
-			final double sideL) {
+	public Square(final double ulx, final double uly, final double sideL) {
 		super();
 		prop.put("ulx", ulx);
 		prop.put("uly", uly);
@@ -44,10 +48,12 @@ public class Square extends Stroke {
 	}
 
 	/**
-	 * Constructor if given upper left corner and side
-	 * length.
-	 * @param ul upper left corner given as Point object.
-	 * @param sideL side length of the square.
+	 * Constructor if given upper left corner and side length.
+	 * 
+	 * @param ul
+	 *            upper left corner given as Point object.
+	 * @param sideL
+	 *            side length of the square.
 	 */
 	public Square(final Point ul, final double sideL) {
 		super();
@@ -61,17 +67,16 @@ public class Square extends Stroke {
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		Shape newSquare = new Square(prop.get("ulx"),
-				prop.get("uly"), prop.get("sideL"));
-		newSquare.getProperties().put("rotated",
-				prop.get("rotated"));
+		Shape newSquare = new Square(prop.get("ulx"), prop.get("uly"), prop.get("sideL"));
+		newSquare.getProperties().put("rotated", prop.get("rotated"));
 		cloneBasic(newSquare, this);
 		return newSquare;
 	}
 
 	@Override
 	public javafx.scene.shape.Shape makeFx() {
-		javafx.scene.shape.Rectangle fxSquare = new javafx.scene.shape.Rectangle(prop.get("ulx"),prop.get("uly"), prop.get("sideL"), prop.get("sideL"));
+		javafx.scene.shape.Rectangle fxSquare = new javafx.scene.shape.Rectangle(prop.get("ulx"), prop.get("uly"),
+				prop.get("sideL"), prop.get("sideL"));
 		fxSquare.setFill(ColourAdapter.getFxColour(fill));
 		fxSquare.setStroke(ColourAdapter.getFxColour(color));
 		return fxSquare;

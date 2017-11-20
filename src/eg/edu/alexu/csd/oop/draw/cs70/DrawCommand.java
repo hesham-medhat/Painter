@@ -13,7 +13,7 @@ public class DrawCommand implements ICommand {
 	private Pane drawingPane;
 	private ShapeController sc;
 
-	public DrawCommand( Pane drawingPaneIn, ShapeController sc) {
+	public DrawCommand(Pane drawingPaneIn, ShapeController sc) {
 		super();
 		this.receiver = sc.getShape();
 		this.drawingPane = drawingPaneIn;
@@ -24,7 +24,6 @@ public class DrawCommand implements ICommand {
 	public void execute() {
 		receiver.draw(drawingPane);
 		sc.enableSelect(true);
-
 
 	}
 

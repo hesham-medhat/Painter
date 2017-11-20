@@ -31,7 +31,7 @@ public class ShapeController {
 		selectEnable = true;
 	}
 
-	protected void move(Point2D clickDifference) {
+	protected ShapeController move(Point2D clickDifference) {
 
 		ShapeController newsc = this;
 		Point oldPosition = shape.getPosition();
@@ -40,7 +40,7 @@ public class ShapeController {
 		newsc.getShape().setPosition(newPosition);
 		newsc.getFx().relocate(newPosition.getX(), newPosition.getY());
 		drawer.updateShape(drawingPane, this, newsc);
-
+		return newsc;
 	}
 
 	protected ShapeController copy(Point2D clickDifference) {

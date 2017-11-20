@@ -44,13 +44,11 @@ public class Drawer implements DrawingEngine {
 	/**
 	 * List of actions performed for undo.
 	 */
-	private final ArrayList<ICommand> actionsPerformed =
-			new ArrayList<>();
+	private final ArrayList<ICommand> actionsPerformed = new ArrayList<>();
 	/**
 	 * List of actions UNPerformed for redo.
 	 */
-	private final ArrayList<ICommand> actionsUNPerformed =
-			new ArrayList<>();
+	private final ArrayList<ICommand> actionsUNPerformed = new ArrayList<>();
 	/**
 	 * Keeps track of whether this drawing engine has found a plugin.
 	 */
@@ -68,18 +66,18 @@ public class Drawer implements DrawingEngine {
 	}
 
 	@Override
-	public void addShape(Pane drawingPane,final ShapeController sc) {
+	public void addShape(Pane drawingPane, final ShapeController sc) {
 		shapes.add(sc.getShape());
-		final DrawCommand draw = new DrawCommand(drawingPane , sc );
+		final DrawCommand draw = new DrawCommand(drawingPane, sc);
 		draw.execute();
 		addCommand(actionsPerformed, draw);
 		actionsUNPerformed.clear();
 	}
 
 	@Override
-	public void removeShape(Pane drawingPane ,final ShapeController sc) {
+	public void removeShape(Pane drawingPane, final ShapeController sc) {
 		shapes.remove(sc.getShape());
-		final RemoveCommand remove = new RemoveCommand(drawingPane , sc);
+		final RemoveCommand remove = new RemoveCommand(drawingPane, sc);
 		remove.execute();
 		addCommand(actionsPerformed, remove);
 	}
@@ -88,7 +86,7 @@ public class Drawer implements DrawingEngine {
 	public void updateShape(Pane drawingPane, final ShapeController oldShape, final ShapeController newShape) {
 		shapes.remove(oldShape.getShape());
 		shapes.add(newShape.getShape());
-		UpdateCommand update = new UpdateCommand(drawingPane , oldShape,newShape);
+		UpdateCommand update = new UpdateCommand(drawingPane, oldShape, newShape);
 		update.execute();
 		addCommand(actionsPerformed, update);
 	}
@@ -108,17 +106,17 @@ public class Drawer implements DrawingEngine {
 		try {
 			JarFile jarFile = new JarFile(path);
 			Enumeration<JarEntry> en = jarFile.entries();
-			URL[] urls = { new URL("jar:file:" + path+"!/") };
+			URL[] urls = { new URL("jar:file:" + path + "!/") };
 			URLClassLoader cl = URLClassLoader.newInstance(urls);
-			Class<?extends eg.edu.alexu.csd.oop.draw.Shape> c = null;
+			Class<? extends eg.edu.alexu.csd.oop.draw.Shape> c = null;
 			while (en.hasMoreElements()) {
 				JarEntry je = en.nextElement();
-				if(je.isDirectory() || !je.getName().endsWith(".class")){
+				if (je.isDirectory() || !je.getName().endsWith(".class")) {
 					continue;
 				}
 				jarFile.close();
 				// -6 because of .class
-				String className = je.getName().substring(0,je.getName().length()-6);
+				String className = je.getName().substring(0, je.getName().length() - 6);
 				className = className.replace('/', '.');
 				c = (Class<? extends eg.edu.alexu.csd.oop.draw.Shape>) cl.loadClass(className);
 			}
@@ -135,7 +133,7 @@ public class Drawer implements DrawingEngine {
 	@Override
 	public List<Class<? extends Shape>> getSupportedShapes() {
 		List<Class<? extends Shape>> result = new ArrayList<>();
-		Class<? extends Shape> shape ;
+		Class<? extends Shape> shape;
 		try {
 			shape = (Class) Class.forName("eg.edu.alexu.csd.oop.draw.cs70.Circle");
 			result.add(shape);
@@ -205,46 +203,27 @@ public class Drawer implements DrawingEngine {
 		if (path == null || !path.contains(".")) {
 			throw new RuntimeException("Invalid path.");
 		}
-		final String extension =
-				path.substring(path.lastIndexOf('.'));
+		final String extension = path.substring(path.lastIndexOf('.'));
 		if (extension.equals(".xml")) {
 			Document doc;
-			final DocumentBuilderFactory dbf =
-					DocumentBuilderFactory.newInstance();
+			final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			try {
-				final DocumentBuilder db =
-						dbf.newDocumentBuilder();
+				final DocumentBuilder db = dbf.newDocumentBuilder();
 				// create instance of DOM
 				doc = db.newDocument();
-				final Element root =
-						doc.createElement("Shapes");
+				final Element root = doc.createElement("Shapes");
 				for (final Shape sh : shapes) {
-					root.appendChild(((Stroke) sh).
-							buildXMLElement(doc));
+					root.appendChild(((Stroke) sh).buildXMLElement(doc));
 				}
 				try {
-					final Transformer tr =
-							TransformerFactory.
-							newInstance().newTransformer();
-					tr.setOutputProperty(OutputKeys.INDENT,
-							"yes");
-					tr.setOutputProperty(OutputKeys.METHOD,
-							"xml");
-					tr.setOutputProperty(
-							OutputKeys.ENCODING,
-							"ISO-8859-1");
-					tr.setOutputProperty(
-							OutputKeys.DOCTYPE_SYSTEM,
-							"roles.dtd");
-					tr.setOutputProperty(
-							"{http://xml.apache"
-									+ ".org/xslt}indent-amount",
-							"4");
+					final Transformer tr = TransformerFactory.newInstance().newTransformer();
+					tr.setOutputProperty(OutputKeys.INDENT, "yes");
+					tr.setOutputProperty(OutputKeys.METHOD, "xml");
+					tr.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
+					tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "roles.dtd");
+					tr.setOutputProperty("{http://xml.apache" + ".org/xslt}indent-amount", "4");
 					// send DOM to file
-					tr.transform(new DOMSource(doc),
-							new StreamResult(new
-									FileOutputStream(
-											path)));
+					tr.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(path)));
 
 				} catch (final TransformerException te) {
 					System.out.println(te.getMessage());
