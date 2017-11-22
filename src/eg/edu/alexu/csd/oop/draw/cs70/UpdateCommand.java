@@ -46,8 +46,10 @@ public class UpdateCommand implements ICommand {
 	 * @param newShape
 	 *            to be updated to.
 	 */
-	public UpdateCommand(Pane drawingPane, ShapeController scNew, ShapeController scOld) {
+	public UpdateCommand(Pane drawingPane, ShapeController scOld, ShapeController scNew) {
 		super();
+		this.scNew = scNew;
+		this.scOld = scOld;
 		this.oldShape = scOld.getShape();
 		this.newShape = scNew.getShape();
 		this.drawingPane = drawingPane;
@@ -56,7 +58,7 @@ public class UpdateCommand implements ICommand {
 
 	@Override
 	public void execute() {
-		drawingPane.getChildren().remove(((Stroke) oldShape).getFxShape());
+		//drawingPane.getChildren().remove(scOld.getFx());
 		newShape.draw(drawingPane);
 		scNew.enableSelect(true);
 		scOld.enableSelect(false);

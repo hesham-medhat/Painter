@@ -85,10 +85,11 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void updateShape(Pane drawingPane, final ShapeController oldShape, final ShapeController newShape) {
-		shapes.remove(oldShape.getShape());
+		
 		shapes.add(newShape.getShape());
 		UpdateCommand update = new UpdateCommand(drawingPane, oldShape, newShape);
 		update.execute();
+		shapes.remove(oldShape.getShape());
 		addCommand(actionsPerformed, update);
 	}
 
