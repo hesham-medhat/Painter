@@ -34,8 +34,8 @@
       <JFXButton fx:id="pluginFinder" layoutX="27.0" layoutY="391.0" onAction="#findPlugin" text="Find plugin" />
       <JFXButton fx:id="load" layoutX="468.0" layoutY="24.0" onAction="#loadState" prefHeight="25.0" prefWidth="76.0" text="Load" />
       <JFXButton fx:id="save" layoutX="378.0" layoutY="24.0" onAction="#saveState" prefHeight="25.0" prefWidth="81.0" text="Save" />
-      <JFXButton layoutX="290.0" layoutY="59.0" prefHeight="25.0" prefWidth="76.0" text="Redo" />
-      <JFXButton layoutX="290.0" layoutY="24.0" prefHeight="25.0" prefWidth="76.0" text="Undo" />
+      <JFXButton fx:id="redoButton" layoutX="290.0" layoutY="59.0" onAction="#redo" prefHeight="25.0" prefWidth="76.0" text="Redo" />
+      <JFXButton fx:id="undoButton" layoutX="290.0" layoutY="24.0" onAction="#undo" prefHeight="25.0" prefWidth="76.0" text="Undo" />
       <JFXButton fx:id="remove" disable="true" layoutX="640.0" layoutY="59.0" onAction="#removeAction" prefHeight="25.0" prefWidth="76.0" text="Remove" />
       <JFXButton fx:id="copy" disable="true" layoutX="556.0" layoutY="59.0" onAction="#copyAction" prefHeight="25.0" prefWidth="76.0" text="Copy" />
       <JFXButton fx:id="move" disable="true" layoutX="468.0" layoutY="59.0" onAction="#moveAction" prefHeight="25.0" prefWidth="76.0" text="Move" />

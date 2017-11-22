@@ -10,7 +10,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import javax.xml.parsers.*;
-import javax.json.*;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -18,6 +17,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.*;
+import org.json.simple.parser.JSONParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -203,7 +204,7 @@ public class Drawer implements DrawingEngine {
 		if (path == null || !path.contains(".")) {
 			throw new RuntimeException("Invalid path.");
 		}
-		final String extension = path.substring(path.lastIndexOf('.'));
+		final String extension = path.substring(path.lastIndexOf('.'), path.length());
 		if (extension.equals(".xml")) {
 			Document doc;
 			final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -224,7 +225,6 @@ public class Drawer implements DrawingEngine {
 					tr.setOutputProperty("{http://xml.apache" + ".org/xslt}indent-amount", "4");
 					// send DOM to file
 					tr.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(path)));
-
 				} catch (final TransformerException te) {
 					System.out.println(te.getMessage());
 				} catch (final IOException ioe) {
@@ -233,15 +233,16 @@ public class Drawer implements DrawingEngine {
 			} catch (final ParserConfigurationException e) {
 				e.printStackTrace();
 			}
-		} else if (extension.equals("json")) {
-			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+		} else if (extension.equals(".json")) {
+			JSONObject arrBuilder = new JSONObject();
+			Integer i = new Integer(0);
 			for (Shape sh : shapes) {
-				arrBuilder.add(((Stroke) sh).buildJsonArray());
+				arrBuilder.append(i.toString(), (((Stroke) sh).buildJsonArray()));
+				i++;
 			}
 			try {
 				FileWriter writer = new FileWriter(path);
-				JsonWriter jw = Json.createWriter(writer);
-				jw.writeArray(arrBuilder.build());
+				arrBuilder.write(writer);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -256,7 +257,7 @@ public class Drawer implements DrawingEngine {
 		if (path == null || path.length() < 5 || !path.contains(".")) {
 			throw new RuntimeException("Invalid path.");
 		}
-		String extension = path.substring(path.lastIndexOf('.'));
+		String extension = path.substring(path.lastIndexOf('.'), path.length());
 		if (extension.equals(".xml")) {
 			Document dom;
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -273,18 +274,19 @@ public class Drawer implements DrawingEngine {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else if (extension.equals("json")) {
+		} else if (extension.equals(".json")) {
 			FileReader reader = new FileReader(path);
-			JsonReader jr = Json.createReader(reader);
-			JsonArray shapesArray = jr.readArray();
+			JSONParser parser = new JSONParser();
+			JSONObject jShapes = (JSONObject) parser.parse(reader);
 			clearDS();
-			if (shapesArray != null) {
-				for (JsonValue jO : shapesArray) {
-					JsonArray jShape = (JsonArray) jO;
+			if (jShapes != null) {
+				for (Integer i = 0; i < jShapes.length(); i++) {
+					JSONArray jShape = (JSONArray) jShapes.get(i.toString());
 					Shape readShape = Stroke.readJsonArray(jShape);
 					shapes.add(readShape);
 				}
 			}
+			reader.close();
 		} else {
 			throw new RuntimeException("Invalid extension.");
 		}

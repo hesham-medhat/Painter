@@ -56,8 +56,8 @@ public class UpdateCommand implements ICommand {
 
 	@Override
 	public void execute() {
-		newShape.draw(drawingPane);
 		drawingPane.getChildren().remove(((Stroke) oldShape).getFxShape());
+		newShape.draw(drawingPane);
 		scNew.enableSelect(true);
 		scOld.enableSelect(false);
 

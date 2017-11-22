@@ -55,6 +55,10 @@ public class Controller {
 	@FXML
 	private JFXButton load;
 	@FXML
+	private JFXButton undoButton;
+	@FXML
+	private JFXButton redoButton;
+	@FXML
 	private TextField path;
 	@FXML
 	Label feedback;
@@ -131,11 +135,13 @@ public class Controller {
 	@FXML
 	private void loadState(ActionEvent e) {
 		try {
+			drawingPane.getChildren().clear();
 			drawer.load(path.getText());
 			shapeControllerList = new ArrayList<>();
 			for (eg.edu.alexu.csd.oop.draw.Shape sh : drawer.getShapes()) {
 				ShapeController controller = new ShapeController(drawingPane, drawer, sh);
 				shapeControllerList.add(controller);
+				sh.draw(drawingPane);
 			}
 		} catch (Exception e1) {
 			feedback.setText("Load failed.");
