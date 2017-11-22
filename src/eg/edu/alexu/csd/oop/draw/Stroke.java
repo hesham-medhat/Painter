@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import org.json.simple.JSONArray;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -172,8 +171,8 @@ public abstract class Stroke implements Shape {
 		colorArr = color.getRGBColorComponents(colorArr);
 		float[] fillArr = new float[3];
 		fillArr = color.getRGBColorComponents(fillArr);
-		Element colorArrB = dom.createElement("colorArr");
-		Element fillArrB = dom.createElement("fillArr");
+		Node colorArrB = dom.createElement("colorArr");
+		Node fillArrB = dom.createElement("fillArr");
 		for (int i = 0; i < 3; i++) {
 			colorArrB.appendChild(dom.createTextNode(((Float) colorArr[i]).toString()));
 			fillArrB.appendChild(dom.createTextNode(((Float) fillArr[i]).toString()));
@@ -251,28 +250,25 @@ public abstract class Stroke implements Shape {
 
 	public abstract javafx.scene.shape.Shape makeFx();
 
+	@SuppressWarnings("unchecked")
 	public JSONArray buildJsonArray() {
 		JSONArray jBasicB = new JSONArray();
-		jBasicB.put(this.toString());
-		float[] colorArr = new float[RGB_COUNT];//
+		jBasicB.add(this.toString());
+		float[] colorArr = new float[RGB_COUNT];
 		colorArr = color.getRGBColorComponents(colorArr);
 		float[] fillArr = new float[RGB_COUNT];
 		fillArr = color.getRGBColorComponents(fillArr);
 		JSONArray colorArrB = new JSONArray();
 		JSONArray fillArrB = new JSONArray();
-		try {
-			for (int i = 0; i < RGB_COUNT; i++) {
-				colorArrB.put(colorArr[i]);
-				fillArrB.put(fillArr[i]);
-			}
-			jBasicB.put(colorArrB);
-			jBasicB.put(fillArrB);
-			jBasicB.put(center.getX());
-			jBasicB.put(center.getY());
-			jBasicB.put(prop.toString());
-		} catch (JSONException je) {
-			je.printStackTrace();
+		for (int i = 0; i < RGB_COUNT; i++) {
+			colorArrB.add(colorArr[i]);
+			fillArrB.add(fillArr[i]);
 		}
+		jBasicB.add(colorArrB);
+		jBasicB.add(fillArrB);
+		jBasicB.add(center.getX());
+		jBasicB.add(center.getY());
+		jBasicB.add(prop.toString());
 		return jBasicB;
 	}
 
@@ -286,8 +282,9 @@ public abstract class Stroke implements Shape {
 			Point center = new Point((int) Double.parseDouble(jShape.get(i++).toString()), (int) Double.parseDouble(jShape.get(i++).toString()));
 			readShape.setPosition(center);
 			readShape.setProperties(readMap(jShape.get(i++).toString()));
+			((Stroke) readShape).setFxShape(((Stroke) readShape).makeFx());
 			return readShape;
-		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | JSONException e) {
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -296,15 +293,10 @@ public abstract class Stroke implements Shape {
 	public static Color getJsonColor (JSONArray jV) {
 		JSONArray jColor = jV;
 		float red, green, blue;
-		try {
-			red = Float.parseFloat(jColor.get(0).toString());
-			green = Float.parseFloat(jColor.get(1).toString());
-			blue = Float.parseFloat(jColor.get(2).toString());
-			return new Color(red, green, blue);
-		} catch (JSONException je) {
-			je.printStackTrace();
-			return null;
-		}
+		red = Float.parseFloat(jColor.get(0).toString());
+		green = Float.parseFloat(jColor.get(1).toString());
+		blue = Float.parseFloat(jColor.get(2).toString());
+		return new Color(red, green, blue);
 	}
 
 	public String toString() {

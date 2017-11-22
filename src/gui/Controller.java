@@ -115,11 +115,13 @@ public class Controller {
 		squareMaker.setDisable(set);
 		triangleMaker.setDisable(set);
 		ellipseMaker.setDisable(set);
-		pluginMaker.setDisable(set);
 		fcPicker.setDisable(set);
 		bcPicker.setDisable(set);
 		save.setDisable(set);
 		load.setDisable(set);
+		if (drawer.isPluginFound()) {
+			pluginMaker.setDisable(set);
+		}
 	}
 
 	@FXML

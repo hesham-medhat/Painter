@@ -17,7 +17,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.json.*;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -199,6 +199,7 @@ public class Drawer implements DrawingEngine {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void save(final String path) throws Exception {
 		if (path == null || !path.contains(".")) {
@@ -237,12 +238,13 @@ public class Drawer implements DrawingEngine {
 			JSONObject arrBuilder = new JSONObject();
 			Integer i = new Integer(0);
 			for (Shape sh : shapes) {
-				arrBuilder.append(i.toString(), (((Stroke) sh).buildJsonArray()));
+				arrBuilder.put(i.toString(), (((Stroke) sh).buildJsonArray()));
 				i++;
 			}
 			try {
 				FileWriter writer = new FileWriter(path);
-				arrBuilder.write(writer);
+				writer.write(arrBuilder.toString());
+				writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -277,11 +279,11 @@ public class Drawer implements DrawingEngine {
 		} else if (extension.equals(".json")) {
 			FileReader reader = new FileReader(path);
 			JSONParser parser = new JSONParser();
-			JSONObject jShapes = (JSONObject) parser.parse(reader);
+			org.json.simple.JSONObject jShapes = (org.json.simple.JSONObject) parser.parse(reader);
 			clearDS();
 			if (jShapes != null) {
-				for (Integer i = 0; i < jShapes.length(); i++) {
-					JSONArray jShape = (JSONArray) jShapes.get(i.toString());
+				for (Integer i = 0; i < jShapes.size(); i++) {
+					org.json.simple.JSONArray jShape = (org.json.simple.JSONArray) jShapes.get(i.toString());
 					Shape readShape = Stroke.readJsonArray(jShape);
 					shapes.add(readShape);
 				}
