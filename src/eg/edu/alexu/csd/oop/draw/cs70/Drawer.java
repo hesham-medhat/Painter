@@ -85,6 +85,7 @@ public class Drawer implements DrawingEngine {
 
 	@Override
 	public void updateShape(Pane drawingPane, final ShapeController oldShape, final ShapeController newShape) {
+		
 		shapes.add(newShape.getShape());
 		UpdateCommand update = new UpdateCommand(drawingPane, oldShape, newShape);
 		update.execute();
@@ -221,13 +222,11 @@ public class Drawer implements DrawingEngine {
 					final Transformer tr = TransformerFactory.newInstance().newTransformer();
 					tr.setOutputProperty(OutputKeys.INDENT, "yes");
 					tr.setOutputProperty(OutputKeys.METHOD, "xml");
-					tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+					tr.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
 					tr.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "roles.dtd");
 					tr.setOutputProperty("{http://xml.apache" + ".org/xslt}indent-amount", "4");
 					// send DOM to file
-					FileOutputStream fos = new FileOutputStream(path);
-					tr.transform(new DOMSource(doc), new StreamResult(fos));
-					fos.close();
+					tr.transform(new DOMSource(doc), new StreamResult(new FileOutputStream(path)));
 				} catch (final TransformerException te) {
 					System.out.println(te.getMessage());
 				} catch (final IOException ioe) {
