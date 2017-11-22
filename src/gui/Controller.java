@@ -471,7 +471,8 @@ public class Controller {
 				finishDrawing();
 			} else if (drawingNow.equals("copy")) {
 				for (ShapeController sc : selectedShapes) {
-					ShapeController newSC = sc.copy(getCenterRelative(me));
+					Point2D pos = new Point2D(me.getX(), me.getY());
+					ShapeController newSC = sc.copy(pos);
 					shapeControllerList.add(newSC);
 				}
 				finishDrawing();

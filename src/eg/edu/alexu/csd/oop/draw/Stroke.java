@@ -165,25 +165,26 @@ public abstract class Stroke implements Shape {
 
 	public abstract Object clone() throws CloneNotSupportedException;
 
-	public Node buildXMLElement(Document dom) {
-		Node root = dom.createTextNode(this.toString());
+	public Element buildXMLElement(Document dom) {
+		Element shapeRoot = dom.createElement(this.toString());
 		float[] colorArr = new float[3];
 		colorArr = color.getRGBColorComponents(colorArr);
 		float[] fillArr = new float[3];
 		fillArr = color.getRGBColorComponents(fillArr);
-		Node colorArrB = dom.createElement("colorArr");
-		Node fillArrB = dom.createElement("fillArr");
+		Element colorArrB = dom.createElement("colorArr");
+		Element fillArrB = dom.createElement("fillArr");
 		for (int i = 0; i < 3; i++) {
+			
 			colorArrB.appendChild(dom.createTextNode(((Float) colorArr[i]).toString()));
 			fillArrB.appendChild(dom.createTextNode(((Float) fillArr[i]).toString()));
 		}
-		root.appendChild(colorArrB);
-		root.appendChild(fillArrB);
-		root.appendChild(dom.createElement("x").appendChild(dom.createTextNode(((Double) center.getX()).toString())));
-		root.appendChild(dom.createElement("y").appendChild(dom.createTextNode(((Double) center.getY()).toString())));
-		root.appendChild(dom.createElement("stroke").appendChild(dom.createTextNode(strokeWidth.toString())));
-		root.appendChild(dom.createElement("prop").appendChild(dom.createTextNode(prop.toString())));
-		return root;
+		shapeRoot.appendChild(colorArrB);
+		shapeRoot.appendChild(fillArrB);
+		shapeRoot.appendChild(dom.createElement("x").appendChild(dom.createTextNode(((Double) center.getX()).toString())));
+		shapeRoot.appendChild(dom.createElement("y").appendChild(dom.createTextNode(((Double) center.getY()).toString())));
+		shapeRoot.appendChild(dom.createElement("stroke").appendChild(dom.createTextNode(strokeWidth.toString())));
+		shapeRoot.appendChild(dom.createElement("prop").appendChild(dom.createTextNode(prop.toString())));
+		return shapeRoot;
 	}
 
 	public static Shape parseXMLShape(Node n) {
