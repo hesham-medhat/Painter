@@ -13,6 +13,7 @@ public class RemoveCommand implements ICommand {
 	private Shape receiver;
 	private Pane drawingPane;
 	private ShapeController sc;
+	public boolean isupdate = false ;
 
 	/**
 	 * Command's type.
@@ -48,6 +49,12 @@ public class RemoveCommand implements ICommand {
 	@Override
 	public String getCommand() {
 		return COMMAND_TYPE;
+	}
+
+	@Override
+	public boolean isupdate() {
+		// TODO Auto-generated method stub
+		return isupdate;
 	}
 
 }

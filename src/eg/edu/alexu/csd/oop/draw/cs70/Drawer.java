@@ -67,25 +67,27 @@ public class Drawer implements DrawingEngine {
 	}
 
 	@Override
-	public void addShape(Pane drawingPane, final ShapeController sc) {
+	public void addShape(Pane drawingPane, final ShapeController sc, boolean isUpdate) {
 		shapes.add(sc.getShape());
 		final DrawCommand draw = new DrawCommand(drawingPane, sc);
+		draw.isupdate = isUpdate;
 		draw.execute();
 		addCommand(actionsPerformed, draw);
 		actionsUNPerformed.clear();
 	}
 
 	@Override
-	public void removeShape(Pane drawingPane, final ShapeController sc) {
+	public void removeShape(Pane drawingPane, final ShapeController sc, boolean isUpdate) {
 		shapes.remove(sc.getShape());
 		final RemoveCommand remove = new RemoveCommand(drawingPane, sc);
+		remove.isupdate = isUpdate;
 		remove.execute();
 		addCommand(actionsPerformed, remove);
 	}
 
 	@Override
 	public void updateShape(Pane drawingPane, final ShapeController oldShape, final ShapeController newShape) {
-		
+
 		shapes.add(newShape.getShape());
 		UpdateCommand update = new UpdateCommand(drawingPane, oldShape, newShape);
 		update.execute();
@@ -167,16 +169,23 @@ public class Drawer implements DrawingEngine {
 			actionsPerformed.remove(actionsPerformed.size() - 1);
 			action.unexecute();
 			addCommand(actionsUNPerformed, action);
-			if (action.getCommand().equals("draw")) {
-				shapes.remove(action.getReceiver(null));
-			} else if (action.getCommand().equals("remove")) {
-				shapes.add(action.getReceiver(null));
-			} else if (action.getCommand().equals("update")) {
-				shapes.add(action.getReceiver("old shape"));
-				shapes.remove(action.getReceiver("new shape"));
+			//if (!action.isupdate()) {
+				if (action.getCommand().equals("draw")) {
+					shapes.remove(action.getReceiver(null));
+				} else if (action.getCommand().equals("remove")) {
+					shapes.add(action.getReceiver(null));
+				} else if (action.getCommand().equals("update")) {
+					shapes.add(action.getReceiver("old shape"));
+					shapes.remove(action.getReceiver("new shape"));
+				}
+		//	} else {
+				ICommand action2 = actionsPerformed.get(actionsPerformed.size() - 1);
+				actionsPerformed.remove(actionsPerformed.size() - 1);
+				action2.unexecute();
+				addCommand(actionsUNPerformed, action2);
 			}
 		}
-	}
+	//}
 
 	@Override
 	public void redo() {
@@ -187,15 +196,22 @@ public class Drawer implements DrawingEngine {
 			actionsUNPerformed.remove(actionsUNPerformed.size() - 1);
 			action.execute();
 			addCommand(actionsPerformed, action);
-			if (action.getCommand().equals("draw")) {
-				shapes.add(action.getReceiver(null));
+			if (!action.isupdate()) {
+				if (action.getCommand().equals("draw")) {
+					shapes.add(action.getReceiver(null));
 
-			} else if (action.getCommand().equals("remove")) {
-				shapes.remove(action.getReceiver(null));
+				} else if (action.getCommand().equals("remove")) {
+					shapes.remove(action.getReceiver(null));
 
-			} else if (action.getCommand().equals("update")) {
-				shapes.remove(action.getReceiver("old shape"));
-				shapes.add(action.getReceiver("new shape"));
+				} else if (action.getCommand().equals("update")) {
+					shapes.remove(action.getReceiver("old shape"));
+					shapes.add(action.getReceiver("new shape"));
+				}
+			} else {
+				ICommand action2 = actionsUNPerformed.get(actionsUNPerformed.size() - 1);
+				actionsUNPerformed.remove(actionsUNPerformed.size() - 1);
+				action2.execute();
+				addCommand(actionsPerformed, action2);
 			}
 		}
 	}

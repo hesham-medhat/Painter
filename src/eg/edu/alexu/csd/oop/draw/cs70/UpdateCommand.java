@@ -58,7 +58,7 @@ public class UpdateCommand implements ICommand {
 
 	@Override
 	public void execute() {
-		//drawingPane.getChildren().remove(scOld.getFx());
+		drawingPane.getChildren().remove(scOld.getFx());
 		newShape.draw(drawingPane);
 		scNew.enableSelect(true);
 		scOld.enableSelect(false);
@@ -87,6 +87,12 @@ public class UpdateCommand implements ICommand {
 		scNew.enableSelect(false);
 		scOld.enableSelect(true);
 
+	}
+
+	@Override
+	public boolean isupdate() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
