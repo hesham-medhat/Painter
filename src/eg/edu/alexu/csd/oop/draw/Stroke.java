@@ -156,9 +156,14 @@ public abstract class Stroke implements Shape {
 	 *            to be cloned.
 	 */
 	public void cloneBasic(Shape newShape, final Shape other) {
-		newShape.setColor(other.getColor());
-		newShape.setFillColor(other.getFillColor());
-		newShape.setPosition(other.getPosition());
+		Color oldColor = other.getColor();
+		Color newColor = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue());
+		Color oldFillColor = other.getColor();
+		Color newFillColor = new Color(oldFillColor.getRed(), oldFillColor.getGreen(), oldFillColor.getBlue());
+		newShape.setColor(newColor);
+		newShape.setFillColor(newFillColor);
+		Point newPosition = new Point(other.getPosition());
+		newShape.setPosition(newPosition);
 	}
 
 	public abstract Object clone() throws CloneNotSupportedException;

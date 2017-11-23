@@ -1,8 +1,11 @@
 package eg.edu.alexu.csd.oop.draw.cs70;
 
+import java.awt.Point;
+
 import eg.edu.alexu.csd.oop.draw.ICommand;
 import eg.edu.alexu.csd.oop.draw.Shape;
 import eg.edu.alexu.csd.oop.draw.Stroke;
+import gui.ColourAdapter;
 import gui.ShapeController;
 import javafx.scene.layout.Pane;
 
@@ -35,8 +38,10 @@ public class UpdateCommand implements ICommand {
 	 */
 	private final Shape newShape;
 	private Pane drawingPane;
-	ShapeController scNew;
-	ShapeController scOld;
+	private ShapeController scNew;
+	private ShapeController scOld;
+	Point newPosition;
+	Point oldPosition;
 
 	/**
 	 * The one and only constructor.
@@ -53,16 +58,19 @@ public class UpdateCommand implements ICommand {
 		this.oldShape = scOld.getShape();
 		this.newShape = scNew.getShape();
 		this.drawingPane = drawingPane;
-
+		newPosition = newShape.getPosition();
+		oldPosition = oldShape.getPosition();
 	}
 
 	@Override
 	public void execute() {
-		drawingPane.getChildren().remove(scOld.getFx());
-		newShape.draw(drawingPane);
+		//drawingPane.getChildren().remove(scOld.getFx());
+		//newShape.draw(drawingPane);
+		ColourAdapter.setColours(newShape, ColourAdapter.getFxColour(oldShape.getFillColor()),
+				ColourAdapter.getFxColour(oldShape.getColor()));
+		((Stroke) newShape).getFxShape().relocate(newShape.getPosition().getX(), newShape.getPosition().getY());
 		scNew.enableSelect(true);
 		scOld.enableSelect(false);
-
 	}
 
 	@Override
@@ -83,16 +91,12 @@ public class UpdateCommand implements ICommand {
 	@Override
 	public void unexecute() {
 		drawingPane.getChildren().remove(((Stroke) newShape).getFxShape());
+		ColourAdapter.setColours(oldShape, ColourAdapter.getFxColour(newShape.getFillColor()), ColourAdapter.getFxColour(newShape.getColor()));
+		((Stroke) oldShape).getFxShape().relocate(oldShape.getPosition().getX(), oldShape.getPosition().getY());
 		oldShape.draw(drawingPane);
 		scNew.enableSelect(false);
 		scOld.enableSelect(true);
 
-	}
-
-	@Override
-	public boolean isupdate() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

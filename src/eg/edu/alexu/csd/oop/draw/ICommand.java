@@ -7,8 +7,6 @@ package eg.edu.alexu.csd.oop.draw;
  *
  */
 public interface ICommand {
-	public boolean isupdate ();
-
 
 	/**
 	 * Executes the command.

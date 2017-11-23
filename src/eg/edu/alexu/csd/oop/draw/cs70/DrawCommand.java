@@ -12,7 +12,6 @@ public class DrawCommand implements ICommand {
 	private static final String COMMAND_TYPE = "draw";
 	private Pane drawingPane;
 	private ShapeController sc;
-	public boolean isupdate = false ;
 
 	public DrawCommand(Pane drawingPaneIn, ShapeController sc) {
 		super();
@@ -44,12 +43,6 @@ public class DrawCommand implements ICommand {
 	 */
 	public Shape getReceiver(String receiver) {
 		return this.receiver;
-	}
-
-	@Override
-	public boolean isupdate() {
-		// TODO Auto-generated method stub
-		return isupdate;
 	}
 
 }

@@ -34,8 +34,8 @@ public abstract class ColourAdapter {
 	 * @return java.awt.Color equivalent.
 	 */
 	public static java.awt.Color getSwingColour(Color fxColour) {
-		java.awt.Color color = new java.awt.Color((int) fxColour.getRed(), (int) fxColour.getGreen(),
-				(int) fxColour.getBlue());
+		java.awt.Color color = new java.awt.Color((int) (fxColour.getRed()*255), (int) (fxColour.getGreen()*255),
+				(int) (fxColour.getBlue()*255));
 		return color;
 	}
 
@@ -47,8 +47,8 @@ public abstract class ColourAdapter {
 	 * @return Color fx equivalent.
 	 */
 	public static Color getFxColour(java.awt.Color swingColour) {
-		Color color = new Color((double) swingColour.getRed(), (double) swingColour.getGreen(),
-				(double) swingColour.getBlue(), 1);
+		Color color = new Color(((double) swingColour.getRed())/256, ((double) swingColour.getGreen())/256,
+				((double) swingColour.getBlue())/256, 1);
 		return color;
 	}
 
